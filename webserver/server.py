@@ -15,16 +15,19 @@ A debugger such as "pdb" may be helpful for debugging.
 Read about it online.
 """
 
-import os,time,requests
+import os,time,requests,psycopg2
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, redirect, Response
+from flask import Flask, request, render_template, g, jsonify, redirect, Response
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 public_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'public')
 app = Flask(__name__, template_folder=tmpl_dir, static_folder=public_dir,static_url_path='')
 
+import logging
 
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 #
 # The following uses the postgresql test.db -- you can use this for debugging purposes
 # However for the project you will need to connect to your Part 2 database in order to use the
@@ -39,7 +42,10 @@ app = Flask(__name__, template_folder=tmpl_dir, static_folder=public_dir,static_
 #     DATABASEURI = "postgresql://ewu2493:foobar@<IP_OF_POSTGRE_SQL_SERVER>/postgres"
 #
 # Swap out the URI below with the URI for the database created in part 2
-DATABASEURI = "sqlite:///test.db"
+host = "104.196.175.120"
+password = "q7kfk"
+user = "gvc2108"
+DATABASEURI  = "postgresql://%s:%s@%s/postgres" % (user, password, host)
 
 
 #
@@ -63,12 +69,12 @@ engine = create_engine(DATABASEURI)
 # 
 # The setup code should be deleted once you switch to using the Part 2 postgresql database
 #
-engine.execute("""DROP TABLE IF EXISTS test;""")
-engine.execute("""CREATE TABLE IF NOT EXISTS test (
-  id serial,
-  name text
-);""")
-engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace');""")
+# engine.execute("""DROP TABLE IF EXISTS test;""")
+# engine.execute("""CREATE TABLE IF NOT EXISTS test (
+#   id serial,
+#   name text
+# );""")
+# engine.execute("""INSERT INTO test(name) VALUES ('grace hopper'), ('alan turing'), ('ada lovelace');""")
 #
 # END SQLITE SETUP CODE
 #
@@ -203,6 +209,38 @@ def add():
   cmd = 'INSERT INTO test(name) VALUES (:name1), (:name2)';
   g.conn.execute(text(cmd), name1 = name, name2 = name);
   return redirect('/')
+
+@app.route('/near_count', methods=['GET'])
+def near_count():
+  #get parameter from request
+  lat = request.args.get('lat', 40.8075355, type=float)
+  lng = request.args.get('lng', -73.9625727, type=float)
+  # print "%d,%d" %(lat,lng)
+  _top = lat +0.01
+  _bottom = lat -0.01
+  _left = lng -0.01
+  _right = lng +0.01
+  # query = text("select l.latitude,l.longitude,l.name,n.count from locations as l, (select count(*), pl.lid from set_ploc as pl where pl.lid IN (select lid from locations latitude >= %s and longitude >= %s and  latitude <= %s and longitude <= %s) group by pl.lid) as n where n.lid=l.lid;")
+  query = "select l.latitude,l.longitude,l.name,n.count from locations as l, (select count(*), pl.lid from set_ploc as pl where pl.lid IN (select lid from locations where latitude >= %s and longitude >= %s and  latitude <= %s and longitude <= %s) group by pl.lid) as n where n.lid=l.lid;"
+  #
+  # query = query.bindparams(b=_bottom, t=_top, l=_left, r=_right)
+  # query = text("select * from users")
+  print query
+  cursor = g.conn.execute(query,_bottom, _left, _top, _right)
+  print cursor
+  ret =[]
+  for result in cursor:
+    data ={}
+    data["latitude"]=float(result["latitude"])
+    data["longitude"]=float(result["longitude"])
+    data["name"]=result["name"]
+    data["count"]=result["count"]
+    ret.append(data)  # can also be accessed using result[0]
+  cursor.close()
+  
+  print ret
+  # return json.dumps(ret).encode('utf-8')
+  return jsonify(data=ret)
 
 
 @app.route('/login')
