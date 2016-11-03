@@ -15,7 +15,7 @@ A debugger such as "pdb" may be helpful for debugging.
 Read about it online.
 """
 
-import os
+import os,time,requests
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response
@@ -129,8 +129,12 @@ def index():
 
   # DEBUG: this is debugging code to see what request looks like
   print request.args
+  print request.user_agent.browser
+  print int(time.time())
 
-
+  url = 'http://freegeoip.net/json/'+request.remote_addr
+  r = requests.get(url)
+  print r.json()
   #
   # example of a database query
   #
