@@ -21,7 +21,8 @@ from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, redirect, Response
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
-app = Flask(__name__, template_folder=tmpl_dir)
+public_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'public')
+app = Flask(__name__, template_folder=tmpl_dir, static_folder=public_dir,static_url_path='')
 
 
 #
@@ -115,6 +116,8 @@ def teardown_request(exception):
 # see for routing: http://flask.pocoo.org/docs/0.10/quickstart/#routing
 # see for decorators: http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
 #
+
+
 @app.route('/')
 def index():
   """

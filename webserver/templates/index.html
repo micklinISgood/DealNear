@@ -1,29 +1,51 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <html>
   <style>
-    body{ 
-      font-size: 15pt;
-      font-family: arial;
-    }
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 90%;
+        top: 0;
+      }
+      .bs-example{
+        height: 10%;
+      }
   </style>
 
 
 <body>
-  <h1>Some famous Computer Scientists</h1>
-  <div>{{data}}</div>
+ <div class="bs-example">
+    <nav class="navbar navbar-default" role="navigation">
 
-  <div>
-    {% for n in data %}
-    <div>{{n}}</div>
-    {% endfor %}
+  <a class="navbar-brand" href="#" >DealNear</a>
+
+    <ul class="nav navbar-nav navbar-left">
+     
+    <!--     <li><a href="#">Left</a></li>
+        <li><a href="#about">Left</a></li> -->
+        <input id="pac-input" class="controls" type="text"
+        placeholder="Enter a location">
+    </ul>
+
   </div>
+</nav>
+</div> 
 
-<p><a href="/another">Go to the other page</a></p>
 
-<form method="POST" action="/add">
-<p>Name of new computer scientist: <input type="text" name="name"> <input type="submit" value="Add"></p>
-</form>
+  
+<div id="map"></div>
 
 </body>
-
+<script type="text/javascript" src="/js/main.js"></script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXgIDmoWXLjZDLWUaUI6Xl_9987AaJO_U&libraries=visualization,places&callback=initMap">
+</script>
 
 </html>

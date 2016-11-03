@@ -1,0 +1,69 @@
+var sec;
+var map, heatmap, infowindow, input, geo_marker;
+
+var Chat = {};
+Chat.socket = null;
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 15,
+    center: {lat: 40.8075355, lng: -73.9625727},
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
+  console.log(map)
+  
+  input = document.getElementById('pac-input');
+  console.log(input)
+  infowindow= new google.maps.InfoWindow({
+    maxWidth: 150
+  });
+  geo_marker = new google.maps.Marker({
+    map: map,
+    anchorPoint: new google.maps.Point(0, -29)
+  });
+ var searchBox = new google.maps.places.SearchBox(input);
+ google.maps.event.addListener(searchBox,'places_changed', function(){
+    infowindow.close();
+    geo_marker.setVisible(false);
+    var place = searchBox.getPlaces()[0];
+    if (!place.geometry) {
+      return;
+    }
+  
+    // If the place has a geometry, then present it on a map.
+    if (place.geometry.viewport) {
+       map.setCenter(place.geometry.location);
+         map.setZoom(17);
+      //map.fitBounds(place.geometry.viewport);
+    } else {
+      map.setCenter(place.geometry.location);
+      map.setZoom(17);  // Why 17? Because it looks good.
+    }
+    geo_marker.setIcon(/** @type {google.maps.Icon} */({
+      url: place.icon,
+      size: new google.maps.Size(71, 71),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(17, 34),
+      scaledSize: new google.maps.Size(35, 35)
+    }));
+    geo_marker.setPosition(place.geometry.location);
+    geo_marker.setVisible(true);
+    
+    var address = '';
+    if (place.address_components) {
+      address = [
+        (place.address_components[0] && place.address_components[0].short_name || ''),
+        (place.address_components[1] && place.address_components[1].short_name || ''),
+        (place.address_components[2] && place.address_components[2].short_name || '')
+      ].join(' ');
+    }
+    infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
+    infowindow.open(map, geo_marker);
+  });
+  //console.log(getPoints());
+   heatmap = new google.maps.visualization.HeatmapLayer({
+     data: [],
+     map: map,
+     radius: 10
+   });
+}
+
