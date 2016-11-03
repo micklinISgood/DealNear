@@ -7,15 +7,17 @@
   <style>
     html, body {
         height: 100%;
-        margin: 0;
-        padding: 0;
+
       }
       #map {
         height: 90%;
         top: 0;
       }
       .bs-example{
-        height: 10%;
+        height: 9%;
+      }
+      #pac-input {
+        margin-top: 3%;
       }
   </style>
 
@@ -24,14 +26,18 @@
  <div class="bs-example">
     <nav class="navbar navbar-default" role="navigation">
 
-  <a class="navbar-brand" href="#" >DealNear</a>
+  <a class="navbar-brand" href="#"> DealNear</a>
 
     <ul class="nav navbar-nav navbar-left">
      
     <!--     <li><a href="#">Left</a></li>
         <li><a href="#about">Left</a></li> -->
-        <input id="pac-input" class="controls" type="text"
-        placeholder="Enter a location">
+      <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+          <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+      </div>
+      </form>
+  
     </ul>
 
   </div>
