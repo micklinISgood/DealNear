@@ -225,13 +225,10 @@ def msg():
     data ={}
     data["time"]=result["time"]
     data["text"]=result["text"]
+    data["name"]=result["name"]
     if(result["from_id"] != uid):
-        u_cursor = g.conn.execute('select name from users where uid=%s',result["from_id"])
-        data["name"]=u_cursor.fetchone()[0]
         data["to_id"]=result["from_id"]
     else:
-        u_cursor = g.conn.execute('select name from users where uid=%s',result["to_id"])
-        data["name"]=u_cursor.fetchone()[0]
         data["to_id"]=result["to_id"]
     ret.append(data)  
   cursor.close()
