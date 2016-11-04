@@ -210,6 +210,37 @@ def add():
   g.conn.execute(text(cmd), name1 = name, name2 = name);
   return redirect('/')
 
+@app.route('/msg', methods=['GET'])
+def msg():
+  uid = request.args.get('uid', 3, type=int)
+
+  query ="Select * from msg where (time, from_id) \
+IN(\
+    Select max(time) as time,from_id from msg where to_id =%s group by from_id)\
+Union Select * from msg where (time, to_id) \
+IN(\
+    Select max(time) as time,to_id from msg where from_id =%s group by to_id) order by time desc limit 5;"
+
+  cursor = g.conn.execute(query,uid,uid)
+  ret =[]
+  for result in cursor:
+    data ={}
+    data["time"]=result["time"]
+    data["text"]=result["text"]
+    if(result["from_id"] != uid):
+        u_cursor = g.conn.execute('select name from users where uid=%s',result["from_id"])
+        data["name"]=u_cursor.fetchone()[0]
+        data["to_id"]=result["from_id"]
+    else:
+        u_cursor = g.conn.execute('select name from users where uid=%s',result["to_id"])
+        data["name"]=u_cursor.fetchone()[0]
+        data["to_id"]=result["to_id"]
+    ret.append(data)  
+  cursor.close()
+
+  return jsonify(data=ret)
+
+
 @app.route('/near_count', methods=['GET'])
 def near_count():
   #get parameter from request
