@@ -1,15 +1,16 @@
 var sec;
-var map, heatmap, infowindow, input, geo_marker;
-
+var map, heatmap, infowindow, input, geo_marker; 
+var markers =[];
 var Chat = {};
 Chat.socket = null;
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 15,
+    zoom: 12,
     center: {lat: 40.8075355, lng: -73.9625727},
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
-  console.log(map)
+  pos = map.getCenter()
+  plot(pos.lat(),pos.lng())
   
   input = document.getElementById('pac-input');
   console.log(input)
@@ -28,16 +29,18 @@ function initMap() {
     if (!place.geometry) {
       return;
     }
-  
+   
     // If the place has a geometry, then present it on a map.
     if (place.geometry.viewport) {
        map.setCenter(place.geometry.location);
-         map.setZoom(17);
+         map.setZoom(12);
       //map.fitBounds(place.geometry.viewport);
     } else {
       map.setCenter(place.geometry.location);
-      map.setZoom(17);  // Why 17? Because it looks good.
+      map.setZoom(12);  // Why 17? Because it looks good.
     }
+
+    plot(place.geometry.location.lat(),place.geometry.location.lng())
     geo_marker.setIcon(/** @type {google.maps.Icon} */({
       url: place.icon,
       size: new google.maps.Size(71, 71),
@@ -59,11 +62,44 @@ function initMap() {
     infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
     infowindow.open(map, geo_marker);
   });
-  //console.log(getPoints());
-   heatmap = new google.maps.visualization.HeatmapLayer({
-     data: [],
-     map: map,
-     radius: 10
-   });
-}
 
+}
+function cleanMarkers(){
+   for(var i in markers){
+      markers[i].setMap(null);
+   }
+   markers = [];
+}
+function plot(_lat,_lng){
+$.getJSON('http://'+ window.location.host + '/near_count', {
+        lat: _lat,
+        lng: _lng
+      }, function(data) {
+          cleanMarkers();
+          _data = data.data;
+          for(var i in _data){
+          var content = _data[i]["name"]+", Sales:"+_data[i]["count"];
+          var myLatLng = {lat: parseFloat(_data[i]["latitude"]), lng: parseFloat(_data[i]["longitude"])};
+          var markerImage = new google.maps.MarkerImage("https://chart.googleapis.com/chart?chst=d_bubble_text_small&&chld=bb%7C"+content+"%7CC6EF8C%7C000000",
+                new google.maps.Size(content.length*10, content.length*2),
+                new google.maps.Point(0, 0),
+                new google.maps.Point(0, content.length));
+          var marker = new google.maps.Marker({
+            position: myLatLng,
+            labelContent: _data[i]["name"]+","+_data[i]["count"],
+            map: map,
+            //anchor: new google.maps.Point(0,content.length),
+            icon:markerImage,
+            animation: google.maps.Animation.DROP
+          });
+          //console.log(marker.getPosition().lat()+","+marker.getPosition().lng());
+          google.maps.event.addListener(marker, 'click', (function (marker) {
+          return function () {
+          //redirect
+            }
+          })(marker));
+
+          markers.push(marker);
+        }
+      });
+}
