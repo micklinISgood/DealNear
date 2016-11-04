@@ -37,7 +37,7 @@ $.getJSON('http://'+ window.location.host + '/msg', {
          	var u = document.getElementById('u'+i);
          	u.innerHTML = _data[i]["name"]+", "+new Date().toString().substring(0,21);
          	var m = document.getElementById('m'+i);
-         	m.innerHTML = "<center>"+_data[i]["text"]+"</center>";
+         	m.innerHTML =_data[i]["text"];
          	msg_id.push(_data[i]["to_id"]);
          }
          
