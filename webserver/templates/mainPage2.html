@@ -1,25 +1,88 @@
 <!DOCTYPE html>
-
-<html>
-
-<title>APP mainPage</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<style>body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif} .w3-third img{margin-bottom:-6px;opacity:0.8;cursor:pointer} .w3-third img:hover{opacity:1}</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<html>
+  <style>
+    html, body {font-family: "Raleway", sans-serif} .w3-third img{margin-bottom:-6px;opacity:0.8;cursor:pointer} .w3-third img:hover{opacity:1} {
+        height: 100%;
+      }
+      #map {
+        height: 90%;
+        top: 0;
+      }
+      #bar {
+        height: 100%;
+      }
+      .bs-example {
+        height: 10%;
+      }
+      #pac-input {
+        margin-top: 3%;
+      }
+  </style>
 
-<body class="w3-light-grey w3-content" style="max-width:1600px">
+  <body class="w3-light-grey w3-content" style="max-width:1600px">
 
-  <!-- Header -->
-  <header class="w3-container w3-center" id="portfolio">
-    <h1><b>Deal Near</b></h1>
-    <div class="w3-section w3-bottombar w3-left-align w3-padding-16">
-      <span class="w3-margin-right">View:</span>
-      <button class="w3-btn" href="#">ALL</button>
-      <button class="w3-btn w3-white" href="#"></i>Most Watched</button>
-      <button class="w3-btn w3-white" href="#"></i>Most Recent</button>
-    </div>
-  </header>
+<!-- from Mick -->
+
+<!-- header -->
+
+ <div class="bs-example">
+    <nav id = "bar" class="navbar navbar-default" role="navigation">
+
+  <a class="navbar-brand" href="#"> DealNear</a>
+
+    <ul class="nav navbar-nav navbar-left">
+      <li><a href="/">Map</a></li>
+     
+    <!--     <li><a href="#">Left</a></li>
+        <li><a href="#about">Left</a></li> -->
+      <form class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+          <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+      </div>
+      </form>
+
+  
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="inbox">Inbox<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#" id="u0"></a></li>
+            <li role="presentation" class="disabled" ><a href="#"id="m0"></a></li>
+            <li role="separator" class="divider"></li>
+             <li><a href="#" id="u1"></a></li>
+            <li role="presentation" class="disabled" ><a href="#"id="m1"></a></li>
+            <li role="separator" class="divider"></li>
+             <li><a href="#" id="u2"></a></li>
+            <li role="presentation" class="disabled" ><a href="#"id="m2"></a></li>
+            <li role="separator" class="divider"></li>
+             <li><a href="#" id="u3"></a></li>
+            <li role="presentation" class="disabled" ><a href="#"id="m3"></a></li>
+            <li role="separator" class="divider"></li>
+             <li><a href="#" id="u4"></a></li>
+            <li role="presentation" class="disabled" ><a href="#"id="m4"></a></li>  
+            
+          </ul>
+        </li>
+        <li><a href="#" id= "post" >Post</a></li>
+        <li><a href="#" id ="login">Login</a></li>
+        <li>a</li>
+      </ul>
+  </div>
+</nav>
+</div> 
+
+
+
+
+
+<!-- OG -->
 
 <!-- Top menu on small screens -->
 <header class="w3-container w3-center w3-top w3-hide-large w3-white w3-xlarge w3-padding-16">
@@ -129,6 +192,7 @@
 </body>
 <!-- End page content -->
 
+<!-- Footer content -->
 <footer>
 <div class="w3-black w3-center w3-padding-24">Made by <a href="https://www.facebook.com/profile.php?id=1229830845#" title="Mick's FB Page" target="_blank" class="w3-hover-opacity">Mick Lin</a> and <a href="https://www.facebook.com/greg.cuesta" title="Greg's FB Page" target="_blank" class="w3-hover-opacity">Greg Cuesta</a></div>
 </footer>
@@ -142,6 +206,11 @@ function onClick(element) {
   var captionText = document.getElementById("caption");
   captionText.innerHTML = element.alt;
 }
+</script>
+<script type="text/javascript" src="/js/util.js"></script>
+<script type="text/javascript" src="/js/card.js"></script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXgIDmoWXLjZDLWUaUI6Xl_9987AaJO_U&libraries=places&callback=init">
 </script>
 
 </html>
