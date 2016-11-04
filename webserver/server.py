@@ -214,14 +214,12 @@ def add():
 def msg():
   uid = request.args.get('uid', 3, type=int)
 
-  query ="Select * from msg where (time, from_id) \
-IN(\
-    Select max(time) as time,from_id from msg where to_id =%s group by from_id)\
-Union Select * from msg where (time, to_id) \
-IN(\
-    Select max(time) as time,to_id from msg where from_id =%s group by to_id) order by time desc limit 5;"
+  query ="Select msg.*, users.name from (select max(bi.time),bi.to_id from (\
+    Select time, to_id as from_id, from_id as to_id, text from msg\
+    union\
+    Select * from msg ) as bi where bi.from_id = %s group by bi.to_id) as new, users,msg where users.uid=new.to_id and msg.time=new.max and (msg.to_id=new.to_id or msg.from_id=new.to_id) order by new.max desc limit 5;"
 
-  cursor = g.conn.execute(query,uid,uid)
+  cursor = g.conn.execute(query,uid)
   ret =[]
   for result in cursor:
     data ={}

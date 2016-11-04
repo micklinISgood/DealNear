@@ -1,6 +1,10 @@
 var input;
+var msg_id =[];
 function init() {
 input = document.getElementById('pac-input');
+
+loadMsg(3);
+console.log(msg_id);
 var searchBox = new google.maps.places.SearchBox(input);
  google.maps.event.addListener(searchBox,'places_changed', function(){
     
@@ -17,4 +21,25 @@ var searchBox = new google.maps.places.SearchBox(input);
 function loadPost(_lat,_lng) {
 	console.log(_lat+","+_lng);
 
+}
+function clearmsgid(){
+	msg_id =[];
+}
+function loadMsg(_uid) {
+clearmsgid();
+$.getJSON('http://'+ window.location.host + '/msg', {
+        uid: _uid
+      }, function(data) {
+      	 _data = data.data;
+         for(var i in _data){
+         	var d = new Date(0);
+    		d.setUTCSeconds(parseInt(_data[i]["time"]));
+         	var u = document.getElementById('u'+i);
+         	u.innerHTML = _data[i]["name"]+", "+new Date().toString().substring(0,21);
+         	var m = document.getElementById('m'+i);
+         	m.innerHTML = "<center>"+_data[i]["text"]+"</center>";
+         	msg_id.push(_data[i]["to_id"]);
+         }
+         
+      });
 }
