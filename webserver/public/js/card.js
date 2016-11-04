@@ -25,7 +25,10 @@ var searchBox = new google.maps.places.SearchBox(input);
 
 }
 function loadPost(_lat,_lng) {
-
+	tmp_con = document.getElementById('content');
+	console.log(tmp_con);
+	console.log(_lat+","+_lng);
+	tmp_con.innerHTML = "";
 	$.getJSON('http://'+ window.location.host + '/near_post', {
         lat: _lat,
         lng: _lng,
@@ -33,12 +36,12 @@ function loadPost(_lat,_lng) {
       }, function(data) {
       	 _data = data.data;
          for(var i in _data){
-         	console.log(_data[i]);
          	var iDiv = document.createElement('div');
 			iDiv.id = _data[i]["pid"];
-			iDiv.className = 'w3-third w3-padding-48';
+			iDiv.className = 'w3-third';
 			var innerDiv = document.createElement('div');
-			innerDiv.className = 'w3-card-12 w3-white ';
+			innerDiv.className = 'w3-card-12 w3-white';
+			innerDiv.style="width:95%";
 			for ( var j in _data[i]["pics"]){
 				var img = document.createElement('img');
 				img.className ='w3-border w3-image'
