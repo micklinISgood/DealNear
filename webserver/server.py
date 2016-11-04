@@ -330,10 +330,25 @@ def near_count():
   return jsonify(data=ret)
 
 
-@app.route('/login')
+@app.route('/login', methods=['POST'])
 def login():
-    abort(401)
-    this_is_never_executed()
+    email=request.form['email']
+    pw=request.form['pw']
+
+    cursor = g.conn.execute("select * from users where email=%s and pw=%s",email, pw)
+    row = cursor.fetchone()
+    if len(row) !=0:
+
+        redirect_to_index = redirect('/market.html')
+        response = app.make_response(redirect_to_index )  
+        response.set_cookie('uid',value=str(row["uid"]))
+        response.set_cookie('name',value=str(row["name"]))
+        return response
+    else:
+        return redirect('/login.html')
+
+
+
 
 
 if __name__ == "__main__":
