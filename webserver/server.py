@@ -147,11 +147,11 @@ def index():
   #
   # example of a database query
   #
-  cursor = g.conn.execute("SELECT name FROM test")
-  names = []
-  for result in cursor:
-    names.append(result['name'])  # can also be accessed using result[0]
-  cursor.close()
+  # cursor = g.conn.execute("SELECT name FROM test")
+  # names = []
+  # for result in cursor:
+  #   names.append(result['name'])  # can also be accessed using result[0]
+  # cursor.close()
 
   #
   # Flask uses Jinja templates, which is an extension to HTML where you can
@@ -178,15 +178,15 @@ def index():
   #     {% for n in data %}
   #     <div>{{n}}</div>
   #     {% endfor %}
-  #
-  context = dict(data = names)
+  # #
+  # context = dict(data = names)
 
 
   #
   # render_template looks in the templates/ folder for files.
   # for example, the below file reads template/index.html
   #
-  return render_template("index.html", **context)
+  return render_template("index.html")
 
 #
 # This is an example of a different path.  You can see it at
@@ -215,19 +215,15 @@ def near_count():
   #get parameter from request
   lat = request.args.get('lat', 40.8075355, type=float)
   lng = request.args.get('lng', -73.9625727, type=float)
-  # print "%d,%d" %(lat,lng)
-  _top = lat +0.01
-  _bottom = lat -0.01
-  _left = lng -0.01
-  _right = lng +0.01
-  # query = text("select l.latitude,l.longitude,l.name,n.count from locations as l, (select count(*), pl.lid from set_ploc as pl where pl.lid IN (select lid from locations latitude >= %s and longitude >= %s and  latitude <= %s and longitude <= %s) group by pl.lid) as n where n.lid=l.lid;")
+
+  _top = lat +0.05
+  _bottom = lat -0.05
+  _left = lng -0.05
+  _right = lng +0.05
   query = "select l.latitude,l.longitude,l.name,n.count from locations as l, (select count(*), pl.lid from set_ploc as pl where pl.lid IN (select lid from locations where latitude >= %s and longitude >= %s and  latitude <= %s and longitude <= %s) group by pl.lid) as n where n.lid=l.lid;"
-  #
-  # query = query.bindparams(b=_bottom, t=_top, l=_left, r=_right)
-  # query = text("select * from users")
-  print query
+
   cursor = g.conn.execute(query,_bottom, _left, _top, _right)
-  print cursor
+
   ret =[]
   for result in cursor:
     data ={}
@@ -235,11 +231,9 @@ def near_count():
     data["longitude"]=float(result["longitude"])
     data["name"]=result["name"]
     data["count"]=result["count"]
-    ret.append(data)  # can also be accessed using result[0]
+    ret.append(data)  
   cursor.close()
-  
-  print ret
-  # return json.dumps(ret).encode('utf-8')
+
   return jsonify(data=ret)
 
 
