@@ -41,7 +41,7 @@ function loadPost(_lat,_lng) {
 			iDiv.className = 'w3-third';
 			var innerDiv = document.createElement('div');
 			innerDiv.className = 'w3-card-12 w3-white';
-			innerDiv.style="width:95%";
+			innerDiv.style="width:95%;padding:2%";
 			for ( var j in _data[i]["pics"]){
 				var img = document.createElement('img');
 				img.className ='w3-border w3-image'
