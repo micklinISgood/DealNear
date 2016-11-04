@@ -210,7 +210,7 @@ def add():
   g.conn.execute(text(cmd), name1 = name, name2 = name);
   return redirect('/')
 
-@app.route('/msg', methods=['GET'])
+@app.route('/inbox', methods=['GET'])
 def msg():
   uid = request.args.get('uid', 3, type=int)
 

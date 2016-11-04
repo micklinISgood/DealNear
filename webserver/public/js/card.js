@@ -27,15 +27,15 @@ function clearmsgid(){
 }
 function loadMsg(_uid) {
 clearmsgid();
-$.getJSON('http://'+ window.location.host + '/msg', {
+$.getJSON('http://'+ window.location.host + '/inbox', {
         uid: _uid
       }, function(data) {
       	 _data = data.data;
          for(var i in _data){
          	var d = new Date(0);
-    		d.setUTCSeconds(parseInt(_data[i]["time"]));
+    		d.setUTCSeconds(_data[i]["time"]);
          	var u = document.getElementById('u'+i);
-         	u.innerHTML = _data[i]["name"]+", "+new Date().toString().substring(0,21);
+         	u.innerHTML = _data[i]["name"]+", "+d.toString().substring(0,21);
          	var m = document.getElementById('m'+i);
          	m.innerHTML =_data[i]["text"];
          	msg_id.push(_data[i]["to_id"]);
