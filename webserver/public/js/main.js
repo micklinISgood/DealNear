@@ -96,6 +96,10 @@ $.getJSON('http://'+ window.location.host + '/near_count', {
           google.maps.event.addListener(marker, 'click', (function (marker) {
           return function () {
           //redirect
+              setCookie("lat", marker.getPosition().lat(), 1);
+              setCookie("lng", marker.getPosition().lng(), 1);
+              window.location.href = 'http://'+ window.location.host + '/market.html';
+
             }
           })(marker));
 
@@ -103,3 +107,10 @@ $.getJSON('http://'+ window.location.host + '/near_count', {
         }
       });
 }
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
