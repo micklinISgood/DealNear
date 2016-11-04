@@ -123,6 +123,32 @@ def teardown_request(exception):
 # see for decorators: http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
 #
 
+def getPostById(pid, data):
+    l_cursor = g.conn.execute("Select name from locations where lid in (Select lid from set_ploc where pid = %s)", pid)
+    loc_str = ""
+    for locs in l_cursor:
+          loc_str += locs["name"]+"; "
+    l_cursor.close()
+    if len(loc_str) >0 : data["locs"] = loc_str
+    l_cursor = g.conn.execute("Select url from  pictures where pid = %s", pid)
+    loc_str = ""
+    data["pics"]=[]
+    for locs in l_cursor:
+          data["pics"].append(locs["url"])
+    l_cursor.close()
+    p_cursor = g.conn.execute("Select amount from set_price where pid = %s order by time desc limit 1", pid)
+    data["price"] = float(p_cursor.fetchone()[0])
+    w_cursor = g.conn.execute("Select count(*) from (Select uid,pid from watch group by uid,pid having pid =%s) as foo", pid)
+    data["watch"] = int(w_cursor.fetchone()[0])
+    u_cursor = g.conn.execute("select users.name, users.uid from create_post, users where pid = %s and users.uid=create_post.uid", pid)
+    u_row = u_cursor.fetchone()
+    data["p_name"] =  u_row["name"] 
+    data["p_uid"] = int(u_row["uid"])
+    r_cursor = g.conn.execute("select avg(point) from rate where to_id= %s ", u_row["uid"])
+    tmp_r =  r_cursor.fetchone()["avg"]
+    if tmp_r is not None : tmp_r= float(tmp_r)
+    data["rate"] = tmp_r
+
 
 @app.route('/')
 def index():
@@ -211,7 +237,7 @@ def add():
   return redirect('/')
 
 @app.route('/inbox', methods=['GET'])
-def msg():
+def inbox():
   uid = request.args.get('uid', 3, type=int)
 
   query ="Select msg.*, users.name from (select max(bi.time),bi.to_id from (\
@@ -235,6 +261,37 @@ def msg():
 
   return jsonify(data=ret)
 
+@app.route('/near_post', methods=['GET'])
+def near_post():
+  lat = request.args.get('lat', 1000, type=float)
+  lng = request.args.get('lng', 1000, type=float)
+  uid = request.args.get('uid', -1, type=int)
+  if lat > 90 or lat < -90 or lng >180 or lng <-180: return jsonify(data="input error")
+  print uid
+
+  _top = lat +0.01
+  _bottom = lat -0.01
+  _left = lng -0.01
+  _right = lng +0.01
+
+  query ="select * from post where status = 0 and pid IN (\
+        select pid from set_ploc where lid IN (\
+        select lid from locations where latitude >= %s and \
+        longitude >= %s and  latitude <= %s and longitude <= %s )\
+        ) order by cr_time desc;"
+
+  cursor = g.conn.execute(query,_bottom, _left, _top, _right)
+  ret =[]
+  for result in cursor:
+    data ={}
+    data["pid"]=result["pid"]
+    data["title"]=result["title"]
+    data["cr_time"]=result["cr_time"]
+    getPostById(result["pid"], data)
+    ret.append(data)  
+  cursor.close()
+
+  return jsonify(data=ret)
 
 @app.route('/near_count', methods=['GET'])
 def near_count():
