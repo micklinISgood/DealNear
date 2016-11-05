@@ -1,4 +1,4 @@
-var input;
+var input, map, selector;
 function init() {
 input = document.getElementById('pac-input');
 $("#post_form").hide();
@@ -83,7 +83,11 @@ var searchBox = new google.maps.places.SearchBox(input);
 }
 
 function openMap(){
-	    console.log("location");       
+	    console.log("location");
+	    //var myLatLng = {lat: parseFloat(_data[i]["latitude"]), lng: parseFloat(_data[i]["longitude"])};
+	   
+	    this.innerHTML="haah";   
+
 }
 
 $(document).on('click', '.btn-add', function(e)
@@ -119,7 +123,28 @@ $("#cancelbtn").click(function(){
 function addnewpost() {
 	 $("#content").hide();
 	 $("#post_form").show();
-	console.log("add new post");
+	 map = new google.maps.Map(document.getElementById('map-selector'), {
+    	zoom: 12,
+    	center: {lat: parseFloat(getCookie("lat")), lng: parseFloat(getCookie("lng"))},
+    	mapTypeId: google.maps.MapTypeId.ROADMAP
+  	});
+	google.maps.event.addListener(map, 'click', function(event) {
+    	if(selector==null){
+    		addMarker(event.latLng, map);
+    	}else{
+    		selector.setPosition(event.latLng);
+    	}
+  	});
+	
+	
+}
+function addMarker(location, map) {
+  // Add the marker at the clicked location, and add the next-available label
+  // from the array of alphabetical characters.
+  selector = new google.maps.Marker({
+    position: location,
+    map: map
+  });
 }
 function login() {
 
