@@ -42,9 +42,24 @@ if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
 	post.onclick = addnewpost; 
 
 }else{
-	in1 =document.getElementById('in');
-	in1.href ='http://'+ window.location.host+'/login.html'; 
-	console.log(in1);
+	// in1 =document.getElementById('in');
+	// in1.className = "button";
+	// in1.onclick =login;
+	var link = 'http://'+ window.location.host+'/login.html';
+	var iframe = document.createElement('iframe');
+	iframe.frameBorder=0;
+	iframe.width="400px";
+	iframe.height="450px";
+	iframe.id="randomid";
+	iframe.setAttribute("src", link);
+	document.getElementById("drop2").appendChild(iframe);
+	iframe.onload = login;
+	$('#randomid').contents().find('button').click(function() {
+    	alert('submit');
+	});
+	// var stuffWasChanged = iframe.contentDocument.stuffWasChanged;
+	// if (stuffWasChanged == "true") window.location.reload();
+	//window.open(in1.href, "login", 'width=400,height=600,scrollbars=yes'); 
 }
 
 
@@ -67,7 +82,12 @@ function addnewpost() {
 }
 function login() {
 	console.log("login");
-	window.location.href = 'http://'+ window.location.host+'/login.html'; 
+
+	if(this.contentWindow.location=='http://'+ window.location.host+'/market.html')
+		window.location.reload();
+	//console.log("login");
+	//$('#my_popup').popup();
+	//window.open('http://'+ window.location.host+'/login.html', "login", 'width=400,height=450,scrollbars=yes');  
 }
 function logout() {
 	$.getJSON('http://'+ window.location.host + '/logout', {
