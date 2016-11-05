@@ -12,7 +12,7 @@
     }
   
 
-    input[type="text"]:focus{
+    input[name="title"]:focus{
         background:#f5fcfe;
         text-indent: 0;
         z-index: 1;

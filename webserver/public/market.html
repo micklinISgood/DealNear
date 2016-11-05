@@ -88,8 +88,10 @@
         <button button type="button" class="btn btn-xs btn-danger pull-right" id ="cancelbtn"><span class="glyphicon  glyphicon-remove">close</span></button><br>
         <div class="control-group" id="fields">
         <div class="controls"> 
-        <form action="/post_item" method="post">
+        <form action="/post_item" method="post" name="item_form">
             <fieldset>
+                    <input  name="uid"  type="hidden"/>
+                    <input  name="token"  type="hidden"/>
                 <div>
                     <input type="text" name="title" required autocomplete="off" placeholder="Product Title"/>
                 </div><br>
@@ -98,23 +100,27 @@
                 </div><br>
                 <div id="controlform">
                  <div class="entry input-group col-xs-3" >
-                        <button class="form-control" name="fields[0]" type="button" id="locbtn1">pick a location from map</button>
+                        <button class="form-control" name="location[0]" type="button" id="locbtn1">Location selector</button>
+                        <input class="form-control" name="location[0][name]" required type="text" placeholder="Set location name" />
+                        <input class="form-control" name="location[0][lat]"  type="number" min="-90" step="0.00000001" max="90" value="" required/>
+                        <input class="form-control" name="location[0][lng]"  type="number" min="-180" step="0.00000001" max="180" value="" required/>
                       <span class="input-group-btn">
                             <button class="btn btn-success btn-add" type="button">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
+                           
                         </span>
+            
+                        <br>
                     </div>
                   </div>
                 <div>
-                    <input type="text" name="location[0][name]" placeholder="pick a location"/>
-                    <input type="hidden" name="location[0][lat]"/>
-                    <input type="hidden" name="location[0][lng]"/>
+                   
                 </div><br>
          
                   
             </fieldset> 
-            <button class="w3-btn w3-indigo" id="postlbtn" type="submit" name="submit" value="Send"align="right">Post</button>    
+            <button class="w3-btn w3-indigo" id="submitbtn" type="submit" value="Send"align="right">Post</button>    
         </form>
         </div>
         </div>
