@@ -358,39 +358,6 @@ def near_count():
 
   return jsonify(data=ret)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-
-  email = request.form['email']
-  pw = request.form['pw']
-
-  enteredLogin = dict(['email', 'pw'])
-  
-  cursor = g.conn.execute("SELECT email, pw FROM users")
-  results = []
-  for result in cursor:
-    logins = {}
-    logins['email'] = string(result['pw'])
-    results.append(logins)
-  cursor.close()
-
-  context = dict(data = results)
-
-  if request.method == 'POST':
-      error = None
-      if enteredLogin in logins:
-        return redirect('/')
-
-
-  return render_template('login.html', **context)
-
-<<<<<<< HEAD
-''' #class example
-@app.route('/login')
-def login():
-    abort(401)
-    this_is_never_executed()''' #
-=======
 @app.route('/login', methods=['POST'])
 def login():
     email=request.form['email']
@@ -412,10 +379,6 @@ def login():
         return response
     else:
         return redirect('/login.html')
-
-
-
->>>>>>> c7e56189abb309d14fe322f2f46c6c1ee54e00a1
 
 
 if __name__ == "__main__":
