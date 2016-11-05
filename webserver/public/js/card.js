@@ -40,6 +40,8 @@ if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
 	loadMsg(getCookie("uid"),getCookie("token"));
 	post =document.getElementById('post');
 	post.onclick = addnewpost; 
+	loc =document.getElementById('locbtn1');
+	loc.onclick = openMap; 
 
 }else{
 	// in1 =document.getElementById('in');
@@ -76,7 +78,40 @@ var searchBox = new google.maps.places.SearchBox(input);
    
   });
 
+
+
 }
+
+function openMap(){
+	    console.log("location");       
+}
+
+$(document).on('click', '.btn-add', function(e)
+    {
+        e.preventDefault();
+
+
+        var controlForm = $('#controlform'),
+            currentEntry = $(this).parents('.entry:first'),
+            newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+        newEntry.find('input').val('');
+        cur_name = newEntry.find('button')[0].name;
+        id = cur_name.substring(cur_name.lastIndexOf("[")+1,cur_name.length-1);
+        id = parseInt(id)+1;
+        newEntry.find('button')[0].name = "fields["+id+"]"; 
+        newEntry.find('button')[0].onclick = openMap;
+        controlForm.find('.entry:not(:last) .btn-add')
+            .removeClass('btn-add').addClass('btn-remove')
+            .removeClass('btn-success').addClass('btn-danger')
+            .html('<span class="glyphicon glyphicon-minus"></span>');
+    }).on('click', '.btn-remove', function(e)
+    {
+		$(this).parents('.entry:first').remove();
+
+		e.preventDefault();
+		return false;
+	});
 $("#cancelbtn").click(function(){
        $("#content").show();
 	 	$("#post_form").hide();         
