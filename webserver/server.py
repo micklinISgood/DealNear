@@ -15,7 +15,7 @@ A debugger such as "pdb" may be helpful for debugging.
 Read about it online.
 """
 
-import os,time,requests,psycopg2
+import os,time,requests,psycopg2,hashlib
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, jsonify, redirect, Response
@@ -337,12 +337,17 @@ def login():
 
     cursor = g.conn.execute("select * from users where email=%s and pw=%s",email, pw)
     row = cursor.fetchone()
-    if len(row) !=0:
-
+    print row
+    if row != None:
+        ltype = request.user_agent.browser
+        ltime = int(time.time())
+        token = hashlib.sha224(ltype+str(ltime)+row["name"]+request.remote_addr).hexdigest()
+        g.conn.execute("INSERT into session values(%s,%s,%s,%s)", row["uid"], ltime ,ltype, token);
         redirect_to_index = redirect('/market.html')
         response = app.make_response(redirect_to_index )  
         response.set_cookie('uid',value=str(row["uid"]))
         response.set_cookie('name',value=str(row["name"]))
+        response.set_cookie('token',value=token)
         return response
     else:
         return redirect('/login.html')
