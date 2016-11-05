@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/css/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif} .w3-third img{margin-bottom:-6px;opacity:0.8;cursor:pointer} .w3-third img:hover{opacity:1}</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<html>
+<body>
+<div id="content" style="width:100%" align= "center"></div>
+
+</body>
+
+<script>
+			
+			var _data = {{ key|tojson }};
+			//console.log(data);
+			var iDiv = document.createElement('div');
+			iDiv.id = _data["pid"];
+			var innerDiv = document.createElement('div');
+			innerDiv.className = 'w3-card-12 w3-white';
+			innerDiv.style="width:95%;padding:2%";
+			for ( var j in _data["pics"]){
+				var img = document.createElement('img');
+				img.className ='w3-border w3-image'
+				img.src = _data["pics"][j];
+				innerDiv.appendChild(img);
+			}
+			var t = document.createElement('table');
+			var tr1 = document.createElement('tr');
+			var tr0 = document.createElement('tr');
+			tr0.innerHTML = "<br/>"
+			var td1 = document.createElement('td');
+			td1.align="left";
+			td1.innerHTML = _data["title"];
+			tr1.appendChild(td1);
+			var td2 = document.createElement('td');
+			td2.align="right";
+			var d = new Date(0);
+    		d.setUTCSeconds(_data["cr_time"]);
+			td2.innerHTML = d.toString().substring(0,21);
+			tr1.appendChild(td2);
+			var tr2 = document.createElement('tr');
+			tr2.innerHTML = "Seller: "+_data["p_name"];
+
+
+			var tr3 = document.createElement('tr');
+			var td3 = document.createElement('td');
+			td3.align="left";
+			td3.innerHTML = "<b>Price</b>: "+_data["price"];
+			tr3.appendChild(td3);
+			var td4 = document.createElement('td');
+			td4.align="right";
+			td4.innerHTML = "Watch: "+_data["watch"];
+			tr3.appendChild(td4);
+			var tr4 = document.createElement('tr');
+			tr4.innerHTML = "@"+ _data["locs"];
+
+			var tr5 = document.createElement('tr');
+			tr5.innerHTML = "<br/>"
+
+
+			t.appendChild(tr0);
+			t.appendChild(tr1);
+			t.appendChild(tr2);
+			t.appendChild(tr3);
+			t.appendChild(tr4);
+			t.appendChild(tr5);
+			innerDiv.appendChild(t);
+
+
+			iDiv.appendChild(innerDiv);
+			document.getElementById('content').appendChild(iDiv);
+
+
+</script>
+</html>

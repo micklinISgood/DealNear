@@ -1,14 +1,67 @@
 var input;
-var msg_id =[];
 function init() {
 input = document.getElementById('pac-input');
 
-loadMsg(3);
+
 if(getCookie("lat")==""){
    	window.location.href = 'http://'+ window.location.host; 
 }else{
     loadPost(getCookie("lat"),getCookie("lng"));
 }
+
+if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
+
+
+	login =document.getElementById('login');
+	login.innerHTML=getCookie("name").substring(1,getCookie("name").length-1);
+	drop =document.getElementById('drop2');
+	drop.innerHTML="";
+	var li = document.createElement("li");
+    var link = document.createElement("a");             
+    var text = document.createTextNode("Info");
+    link.appendChild(text);
+    //link.onclick = logout;
+    li.appendChild(link);
+    drop.appendChild(li);
+    li = document.createElement("li");
+    link = document.createElement("a");             
+    text = document.createTextNode("Items");
+    link.appendChild(text);
+    //link.onclick = logout;
+    li.appendChild(link);
+    drop.appendChild(li);
+    li = document.createElement("li");
+    link = document.createElement("a");             
+    text = document.createTextNode("Logout");
+    link.appendChild(text);
+    link.onclick = logout;
+    li.appendChild(link);
+    drop.appendChild(li);
+	loadMsg(getCookie("uid"),getCookie("token"));
+	post =document.getElementById('post');
+	post.onclick = addnewpost; 
+
+}else{
+	// in1 =document.getElementById('in');
+	// in1.className = "button";
+	// in1.onclick =login;
+	var link = 'http://'+ window.location.host+'/login.html';
+	var iframe = document.createElement('iframe');
+	iframe.frameBorder=0;
+	iframe.width="400px";
+	iframe.height="450px";
+	iframe.id="randomid";
+	iframe.setAttribute("src", link);
+	document.getElementById("drop2").appendChild(iframe);
+	iframe.onload = login;
+	$('#randomid').contents().find('button').click(function() {
+    	alert('submit');
+	});
+	// var stuffWasChanged = iframe.contentDocument.stuffWasChanged;
+	// if (stuffWasChanged == "true") window.location.reload();
+	//window.open(in1.href, "login", 'width=400,height=600,scrollbars=yes'); 
+}
+
 
 
 var searchBox = new google.maps.places.SearchBox(input);
@@ -24,10 +77,37 @@ var searchBox = new google.maps.places.SearchBox(input);
   });
 
 }
+function addnewpost() {
+	console.log("add new post");
+}
+function login() {
+	console.log("login");
+
+	if(this.contentWindow.location=='http://'+ window.location.host+'/market.html')
+		window.location.reload();
+	//console.log("login");
+	//$('#my_popup').popup();
+	//window.open('http://'+ window.location.host+'/login.html', "login", 'width=400,height=450,scrollbars=yes');  
+}
+function logout() {
+	$.getJSON('http://'+ window.location.host + '/logout', {
+        uid: getCookie("uid"),
+        token: getCookie("token"),
+      }, function(data) { 
+      		console.log(data);
+      		if(data.data=='ok'){
+      			setCookie("uid","",0);
+      			setCookie("name","",0);
+      			setCookie("token","",0);
+      			window.location.href = 'http://'+ window.location.host+'/market.html'; 
+      		}
+      });
+}
+function viewUserinfo(){
+	console.log("popup user info and history");
+}
 function loadPost(_lat,_lng) {
 	tmp_con = document.getElementById('content');
-	console.log(tmp_con);
-	console.log(_lat+","+_lng);
 	tmp_con.innerHTML = "";
 	$.getJSON('http://'+ window.location.host + '/near_post', {
         lat: _lat,
@@ -112,15 +192,29 @@ function clickPhoto(element) {
   captionText.innerHTML = this.alt;
 }
 function sendMsg(element) {
+	// console.log(this.id);
+	ids = this.id.split(",");
+	// console.log(ids);
+	$.getJSON('http://'+ window.location.host + '/sendMsg', {
+        from_id: getCookie("uid"),
+        token: getCookie("token"),
+        to_id: ids[0],
+        text: 'http://'+ window.location.host + '/p/'+ids[1]+'\n I am interested in this.'
+      }, function(data) { 
+      		// console.log(data);
+      });
+
+}
+
+function fireChatroom(){
 	console.log(this.id);
+	console.log(getCookie("uid"));
+
 }
-function clearmsgid(){
-	msg_id =[];
-}
-function loadMsg(_uid) {
-clearmsgid();
+function loadMsg(_uid,_token) {
 $.getJSON('http://'+ window.location.host + '/inbox', {
-        uid: _uid
+        uid: _uid,
+        token:_token
       }, function(data) {
       	 _data = data.data;
          for(var i in _data){
@@ -128,9 +222,10 @@ $.getJSON('http://'+ window.location.host + '/inbox', {
     		d.setUTCSeconds(_data[i]["time"]);
          	var u = document.getElementById('u'+i);
          	u.innerHTML = _data[i]["name"]+", "+d.toString().substring(0,21);
+         	u.id = _data[i]["to_id"];
+         	u.onclick = fireChatroom;
          	var m = document.getElementById('m'+i);
          	m.innerHTML =_data[i]["text"];
-         	msg_id.push(_data[i]["to_id"]);
          }
          
       });

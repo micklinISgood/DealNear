@@ -15,7 +15,7 @@ A debugger such as "pdb" may be helpful for debugging.
 Read about it online.
 """
 
-import os,time,requests,psycopg2
+import os,time,requests,psycopg2,hashlib
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, jsonify, redirect, Response, url_for
@@ -123,24 +123,27 @@ def teardown_request(exception):
 # see for decorators: http://simeonfranklin.com/blog/2012/jul/1/python-decorators-in-12-steps/
 #
 
-def getPostById(pid, data):
-    l_cursor = g.conn.execute("Select name from locations where lid in (Select lid from set_ploc where pid = %s)", pid)
+def getPostById(result, data):
+    data["pid"]=result["pid"]
+    data["title"]=result["title"]
+    data["cr_time"]=result["cr_time"]
+    l_cursor = g.conn.execute("Select name from locations where lid in (Select lid from set_ploc where pid = %s)", result["pid"])
     loc_str = ""
     for locs in l_cursor:
           loc_str += locs["name"]+"; "
     l_cursor.close()
     if len(loc_str) >0 : data["locs"] = loc_str
-    l_cursor = g.conn.execute("Select url from  pictures where pid = %s", pid)
+    l_cursor = g.conn.execute("Select url from  pictures where pid = %s", result["pid"])
     loc_str = ""
     data["pics"]=[]
     for locs in l_cursor:
           data["pics"].append(locs["url"])
     l_cursor.close()
-    p_cursor = g.conn.execute("Select amount from set_price where pid = %s order by time desc limit 1", pid)
+    p_cursor = g.conn.execute("Select amount from set_price where pid = %s order by time desc limit 1", result["pid"])
     data["price"] = float(p_cursor.fetchone()[0])
-    w_cursor = g.conn.execute("Select count(*) from (Select uid,pid from watch group by uid,pid having pid =%s) as foo", pid)
+    w_cursor = g.conn.execute("Select count(*) from (Select uid,pid from watch group by uid,pid having pid =%s) as foo", result["pid"])
     data["watch"] = int(w_cursor.fetchone()[0])
-    u_cursor = g.conn.execute("select users.name, users.uid from create_post, users where pid = %s and users.uid=create_post.uid", pid)
+    u_cursor = g.conn.execute("select users.name, users.uid from create_post, users where pid = %s and users.uid=create_post.uid", result["pid"])
     u_row = u_cursor.fetchone()
     data["p_name"] =  u_row["name"] 
     data["p_uid"] = int(u_row["uid"])
@@ -236,9 +239,48 @@ def add():
   g.conn.execute(text(cmd), name1 = name, name2 = name);
   return redirect('/')
 
+
+@app.route('/p/<path:path>')
+def postlink(path):
+  print path
+  data={}
+  cursor = g.conn.execute("select * from post where pid = %s",path)
+  getPostById(cursor.fetchone(),data)
+  return render_template("post.html", key=data)
+
+@app.route('/sendMsg', methods=['GET'])
+def sendMsg():
+  from_id = request.args.get('from_id', -1, type=int)
+  to_id = request.args.get('to_id', -1, type=int)
+  token = request.args.get('token', "", type=str)
+  text = request.args.get('text', "", type=str)
+  # print to_id,from_id
+  if from_id == -1 or to_id == -1 or text=="" or token=="": return jsonify(data="error")
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",from_id,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
+
+  g.conn.execute("INSERT into msg values (%s,%s,%s,%s)",int(time.time()),from_id,to_id,text)
+
+  return jsonify(data="ok")
+
+@app.route('/logout', methods=['GET'])
+def logout():
+  uid = request.args.get('uid', -1, type=int)
+  token = request.args.get('token', "", type=str)
+
+  if uid == -1 or token=="": return jsonify(data="error")
+  g.conn.execute("delete from session where uid=%s and location=%s",uid,token)
+ 
+  return jsonify(data="ok")
+
 @app.route('/inbox', methods=['GET'])
 def inbox():
-  uid = request.args.get('uid', 3, type=int)
+  uid = request.args.get('uid', -1, type=int)
+  token = request.args.get('token', "", type=str)
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
 
   query ="Select msg.*, users.name from (select max(bi.time),bi.to_id from (\
     Select time, to_id as from_id, from_id as to_id, text from msg\
@@ -284,10 +326,7 @@ def near_post():
   ret =[]
   for result in cursor:
     data ={}
-    data["pid"]=result["pid"]
-    data["title"]=result["title"]
-    data["cr_time"]=result["cr_time"]
-    getPostById(result["pid"], data)
+    getPostById(result, data)
     ret.append(data)  
   cursor.close()
 
@@ -345,11 +384,38 @@ def login():
 
   return render_template('login.html', **context)
 
+<<<<<<< HEAD
 ''' #class example
 @app.route('/login')
 def login():
     abort(401)
     this_is_never_executed()''' #
+=======
+@app.route('/login', methods=['POST'])
+def login():
+    email=request.form['email']
+    pw=request.form['pw']
+
+    cursor = g.conn.execute("select * from users where email=%s and pw=%s",email, pw)
+    row = cursor.fetchone()
+    # print row
+    if row != None:
+        ltype = request.user_agent.browser
+        ltime = int(time.time())
+        token = hashlib.sha224(ltype+str(ltime)+row["name"]+request.remote_addr).hexdigest()
+        g.conn.execute("INSERT into session values(%s,%s,%s,%s)", row["uid"], ltime ,ltype, token);
+        redirect_to_index = redirect('/market.html')
+        response = app.make_response(redirect_to_index )  
+        response.set_cookie('uid',value=str(row["uid"]))
+        response.set_cookie('name',value=str(row["name"]))
+        response.set_cookie('token',value=token)
+        return response
+    else:
+        return redirect('/login.html')
+
+
+
+>>>>>>> c7e56189abb309d14fe322f2f46c6c1ee54e00a1
 
 
 if __name__ == "__main__":
