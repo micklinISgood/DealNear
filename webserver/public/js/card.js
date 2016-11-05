@@ -10,9 +10,18 @@ if(getCookie("lat")==""){
 }
 if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
 
+
 	login =document.getElementById('login');
+
 	login.innerHTML=getCookie("name").substring(1,getCookie("name").length-1);
-	login.onclick = viewUserinfo; 
+	drop =document.getElementById('drop2');
+	var li = document.createElement("li");
+    var link = document.createElement("a");             
+    var text = document.createTextNode("logout");
+    link.appendChild(text);
+    link.onclick = logout;
+    li.appendChild(link);
+    drop.appendChild(li);
 	loadMsg(getCookie("uid"),getCookie("token"));
 	post =document.getElementById('post');
 	post.onclick = addnewpost; 
@@ -36,16 +45,17 @@ var searchBox = new google.maps.places.SearchBox(input);
 function addnewpost() {
 	console.log("add new post");
 }
-function unlogin() {
+function login() {
 	window.location.href = 'http://'+ window.location.host+'/login.html'; 
+}
+function logout() {
+	console.log("ha");
 }
 function viewUserinfo(){
 	console.log("popup user info and history");
 }
 function loadPost(_lat,_lng) {
 	tmp_con = document.getElementById('content');
-	console.log(tmp_con);
-	console.log(_lat+","+_lng);
 	tmp_con.innerHTML = "";
 	$.getJSON('http://'+ window.location.host + '/near_post', {
         lat: _lat,
@@ -130,16 +140,16 @@ function clickPhoto(element) {
   captionText.innerHTML = this.alt;
 }
 function sendMsg(element) {
-	console.log(this.id);
+	// console.log(this.id);
 	ids = this.id.split(",");
-	console.log(ids);
+	// console.log(ids);
 	$.getJSON('http://'+ window.location.host + '/sendMsg', {
         from_id: getCookie("uid"),
         token: getCookie("token"),
         to_id: ids[0],
-        text: 'http://'+ window.location.host + '/p/'+ids[1]
+        text: 'http://'+ window.location.host + '/p/'+ids[1]+'\n I am interested in this.'
       }, function(data) { 
-      		console.log(data);
+      		// console.log(data);
       });
 
 }
