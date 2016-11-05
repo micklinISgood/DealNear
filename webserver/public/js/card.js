@@ -1,5 +1,4 @@
 var input;
-var msg_id =[];
 function init() {
 input = document.getElementById('pac-input');
 
@@ -13,8 +12,12 @@ if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
 
 	login =document.getElementById('login');
 	login.innerHTML=getCookie("name").substring(1,getCookie("name").length-1);
+	login.onclick = viewUserinfo; 
 	loadMsg(getCookie("uid"),getCookie("token"));
+	post =document.getElementById('post');
+	post.onclick = addnewpost; 
 }
+
 
 
 var searchBox = new google.maps.places.SearchBox(input);
@@ -29,6 +32,15 @@ var searchBox = new google.maps.places.SearchBox(input);
    
   });
 
+}
+function addnewpost() {
+	console.log("add new post");
+}
+function unlogin() {
+	window.location.href = 'http://'+ window.location.host+'/login.html'; 
+}
+function viewUserinfo(){
+	console.log("popup user info and history");
 }
 function loadPost(_lat,_lng) {
 	tmp_con = document.getElementById('content');
@@ -119,12 +131,25 @@ function clickPhoto(element) {
 }
 function sendMsg(element) {
 	console.log(this.id);
+	ids = this.id.split(",");
+	console.log(ids);
+	$.getJSON('http://'+ window.location.host + '/sendMsg', {
+        from_id: getCookie("uid"),
+        token: getCookie("token"),
+        to_id: ids[0],
+        text: 'http://'+ window.location.host + '/p/'+ids[1]
+      }, function(data) { 
+      		console.log(data);
+      });
+
 }
-function clearmsgid(){
-	msg_id =[];
+
+function fireChatroom(){
+	console.log(this.id);
+	console.log(getCookie("uid"));
+
 }
 function loadMsg(_uid,_token) {
-clearmsgid();
 $.getJSON('http://'+ window.location.host + '/inbox', {
         uid: _uid,
         token:_token
@@ -135,9 +160,10 @@ $.getJSON('http://'+ window.location.host + '/inbox', {
     		d.setUTCSeconds(_data[i]["time"]);
          	var u = document.getElementById('u'+i);
          	u.innerHTML = _data[i]["name"]+", "+d.toString().substring(0,21);
+         	u.id = _data[i]["to_id"];
+         	u.onclick = fireChatroom;
          	var m = document.getElementById('m'+i);
          	m.innerHTML =_data[i]["text"];
-         	msg_id.push(_data[i]["to_id"]);
          }
          
       });

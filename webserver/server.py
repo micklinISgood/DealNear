@@ -248,6 +248,21 @@ def postlink(path):
   getPostById(cursor.fetchone(),data)
   return render_template("post.html", key=data)
 
+@app.route('/sendMsg', methods=['GET'])
+def sendMsg():
+  from_id = request.args.get('from_id', -1, type=int)
+  to_id = request.args.get('to_id', -1, type=int)
+  token = request.args.get('token', "", type=str)
+  text = request.args.get('text', "", type=str)
+  # print to_id,from_id
+  if from_id == -1 or to_id == -1 or text=="" or token=="": return jsonify(data="error")
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",from_id,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
+
+  g.conn.execute("INSERT into msg values (%s,%s,%s,%s)",int(time.time()),from_id,to_id,text)
+
+  return jsonify(data="ok")
 
 @app.route('/inbox', methods=['GET'])
 def inbox():
