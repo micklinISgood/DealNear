@@ -1,0 +1,77 @@
+@import url(//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css);
+
+.messageOwner {
+    background-color:#4682B4;
+    width:320px;
+    border:1px solid #bbb;
+    margin:50px;
+}
+.ownerName {
+    background-color:#4682B4;
+    padding:10px;
+}
+.ownerName label{
+  color:#ffffff;
+  margin:0;
+  display:inline-block;
+}
+
+.commentBox {
+    padding:10px;
+    border-top:1px dotted #bbb;
+}
+.commentBox .form-group:first-child, .actionBox .form-group:first-child {
+    width:100%;
+}
+.commentBox .form-group:nth-child(2), .actionBox .form-group:nth-child(2) {
+    width: 30%;
+    padding: 5px;
+}
+
+.actionBox .form-group * {
+    width:100%;
+}
+.taskDescription {
+    margin-top:10px 0;
+}
+.commentList {
+    background-color:#FFFFFF; 
+    padding:0;
+    list-style:none;
+    max-height:200px;
+    overflow:auto;
+}
+.commentList li {
+    margin:0;
+    margin-top:10px;
+}
+.commentList li > div {
+    display:table-cell;
+}
+
+.commenterName {
+    background-color:#fdfdfd;
+    padding:10px;
+}
+
+.commenterName label{
+  color:#444;
+  margin:0;
+  display:inline-block;
+}
+
+}
+.message p {
+    width:100%;
+    margin:0;
+}
+.sub-text {
+    color:#aaa;
+    font-family:verdana;
+    font-size:11px;
+}
+.actionBox {
+    background-color:#4682B4; 
+    border-top:1px dotted #bbb;
+    padding:10px;
+}

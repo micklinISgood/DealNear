@@ -18,7 +18,7 @@ Read about it online.
 import os,time,requests,psycopg2,hashlib
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
-from flask import Flask, request, render_template, g, jsonify, redirect, Response, url_for
+from flask import Flask, request, render_template, g, jsonify, redirect, Response
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 public_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'public')
@@ -358,6 +358,7 @@ def near_count():
 
   return jsonify(data=ret)
 
+
 @app.route('/login', methods=['POST'])
 def login():
     email=request.form['email']
@@ -379,6 +380,9 @@ def login():
         return response
     else:
         return redirect('/login.html')
+
+
+
 
 
 if __name__ == "__main__":
