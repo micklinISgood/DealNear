@@ -3,11 +3,17 @@ var msg_id =[];
 function init() {
 input = document.getElementById('pac-input');
 
-loadMsg(3);
+
 if(getCookie("lat")==""){
    	window.location.href = 'http://'+ window.location.host; 
 }else{
     loadPost(getCookie("lat"),getCookie("lng"));
+}
+if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
+
+	login =document.getElementById('login');
+	login.innerHTML=getCookie("name").substring(1,getCookie("name").length-1);
+	loadMsg(getCookie("uid"),getCookie("token"));
 }
 
 
@@ -117,10 +123,11 @@ function sendMsg(element) {
 function clearmsgid(){
 	msg_id =[];
 }
-function loadMsg(_uid) {
+function loadMsg(_uid,_token) {
 clearmsgid();
 $.getJSON('http://'+ window.location.host + '/inbox', {
-        uid: _uid
+        uid: _uid,
+        token:_token
       }, function(data) {
       	 _data = data.data;
          for(var i in _data){

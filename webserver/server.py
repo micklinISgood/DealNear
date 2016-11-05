@@ -251,7 +251,11 @@ def postlink(path):
 
 @app.route('/inbox', methods=['GET'])
 def inbox():
-  uid = request.args.get('uid', 3, type=int)
+  uid = request.args.get('uid', -1, type=int)
+  token = request.args.get('token', "", type=str)
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
 
   query ="Select msg.*, users.name from (select max(bi.time),bi.to_id from (\
     Select time, to_id as from_id, from_id as to_id, text from msg\
@@ -337,7 +341,7 @@ def login():
 
     cursor = g.conn.execute("select * from users where email=%s and pw=%s",email, pw)
     row = cursor.fetchone()
-    print row
+    # print row
     if row != None:
         ltype = request.user_agent.browser
         ltime = int(time.time())
