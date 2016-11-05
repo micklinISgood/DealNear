@@ -1,4 +1,4 @@
-var input, map, selector;
+var input, map, selector,infowindow, selector_btn;
 function init() {
 input = document.getElementById('pac-input');
 $("#post_form").hide();
@@ -83,10 +83,12 @@ var searchBox = new google.maps.places.SearchBox(input);
 }
 
 function openMap(){
-	    console.log("location");
+		selector_btn = this;
+		selector_btn.innerHTML="selected location selector";
 	    //var myLatLng = {lat: parseFloat(_data[i]["latitude"]), lng: parseFloat(_data[i]["longitude"])};
-	   
-	    this.innerHTML="haah";   
+	    if (selector !=null){ selector.setMap(null); selector=null;}
+
+ 
 
 }
 
@@ -101,6 +103,7 @@ $(document).on('click', '.btn-add', function(e)
 
         newEntry.find('input').val('');
         cur_name = newEntry.find('button')[0].name;
+        newEntry.find('button')[0].innerHTML="pick a location from map";
         id = cur_name.substring(cur_name.lastIndexOf("[")+1,cur_name.length-1);
         id = parseInt(id)+1;
         newEntry.find('button')[0].name = "fields["+id+"]"; 
@@ -118,7 +121,7 @@ $(document).on('click', '.btn-add', function(e)
 	});
 $("#cancelbtn").click(function(){
        $("#content").show();
-	 	$("#post_form").hide();         
+	   $("#post_form").hide();         
     });
 function addnewpost() {
 	 $("#content").hide();
@@ -128,20 +131,31 @@ function addnewpost() {
     	center: {lat: parseFloat(getCookie("lat")), lng: parseFloat(getCookie("lng"))},
     	mapTypeId: google.maps.MapTypeId.ROADMAP
   	});
+
 	google.maps.event.addListener(map, 'click', function(event) {
+		if(selector_btn==null){
+			alert("select an location selector from the form first");
+		}else{
     	if(selector==null){
     		addMarker(event.latLng, map);
     	}else{
     		selector.setPosition(event.latLng);
     	}
+
+    	selector_btn.innerHTML=event.latLng.lat()+","+event.latLng.lng();
+    	}
   	});
+  	
 	
 	
+}
+function getMarker() {
+	console.log(this);
 }
 function addMarker(location, map) {
   // Add the marker at the clicked location, and add the next-available label
   // from the array of alphabetical characters.
-  selector = new google.maps.Marker({
+    selector = new google.maps.Marker({
     position: location,
     map: map
   });
