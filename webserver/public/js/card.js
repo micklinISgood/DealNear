@@ -1,7 +1,7 @@
 var input;
 function init() {
 input = document.getElementById('pac-input');
-
+$("#post_form").hide();
 
 if(getCookie("lat")==""){
    	window.location.href = 'http://'+ window.location.host; 
@@ -77,11 +77,16 @@ var searchBox = new google.maps.places.SearchBox(input);
   });
 
 }
+$("#cancelbtn").click(function(){
+       $("#content").show();
+	 	$("#post_form").hide();         
+    });
 function addnewpost() {
+	 $("#content").hide();
+	 $("#post_form").show();
 	console.log("add new post");
 }
 function login() {
-	console.log("login");
 
 	if(this.contentWindow.location=='http://'+ window.location.host+'/market.html')
 		window.location.reload();
@@ -188,6 +193,8 @@ function loadPost(_lat,_lng) {
 function clickPhoto(element) {
   document.getElementById("img01").src =this.src;
   document.getElementById("modal01").style.display = "block";
+  ids = this.id.split(",");
+  console.log(ids);
   var captionText = document.getElementById("caption");
   captionText.innerHTML = this.alt;
 }

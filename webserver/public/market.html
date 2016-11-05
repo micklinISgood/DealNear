@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="/css/bootstrap.min.css">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+<link rel="stylesheet" href="/css/post_form.css">
+<link rel="stylesheet" href="/css/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <style>body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif} .w3-third img{margin-bottom:-6px;opacity:0.8;cursor:pointer} .w3-third img:hover{opacity:1}</style>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -80,7 +82,33 @@
 </div> 
 
 <div class="w3 container w3-row w3-padding w3-margin-top" id="content"></div>
-  
+<div class="w3 container w3-row w3-padding w3-margin-top" id="post_form">
+<div class="w3-card-12 w3-white" style="width: 100%; padding: 2%;">
+ <div id="wrapper">
+        <button button type="button" class="btn btn-xs btn-danger pull-right" id ="cancelbtn"><span class="glyphicon  glyphicon-remove">close</span></button><br>
+        <form action="" method="post">
+            <fieldset>
+                <div>
+                    <input type="text" name="first_name" placeholder="First Name"/>
+                </div>
+                <div>
+                    <input type="text" name="last_name" placeholder="Last Name"/>
+                </div>
+                <div>
+                    <input type="password" name="first_name" placeholder="Password"/>
+                </div>
+                <div>
+                    <input type="text" name="email" placeholder="Email"/>
+                </div>
+                <div>
+                    <textarea name="message" placeholder="Message"></textarea>
+                </div> 
+                 <button class="w3-btn w3-indigo" id="postlbtn" type="submit" name="submit" value="Send"align="right">Post</button>  
+            </fieldset>    
+        </form>
+    </div>
+</div>
+</div>  
 
   
     <!-- Modal for full size images on click-->
