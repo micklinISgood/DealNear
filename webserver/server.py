@@ -264,6 +264,16 @@ def sendMsg():
 
   return jsonify(data="ok")
 
+@app.route('/logout', methods=['GET'])
+def logout():
+  uid = request.args.get('uid', -1, type=int)
+  token = request.args.get('token', "", type=str)
+
+  if uid == -1 or token=="": return jsonify(data="error")
+  g.conn.execute("delete from session where uid=%s and location=%s",uid,token)
+ 
+  return jsonify(data="ok")
+
 @app.route('/inbox', methods=['GET'])
 def inbox():
   uid = request.args.get('uid', -1, type=int)

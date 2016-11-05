@@ -8,16 +8,31 @@ if(getCookie("lat")==""){
 }else{
     loadPost(getCookie("lat"),getCookie("lng"));
 }
+
 if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
 
 
 	login =document.getElementById('login');
-
 	login.innerHTML=getCookie("name").substring(1,getCookie("name").length-1);
 	drop =document.getElementById('drop2');
+	drop.innerHTML="";
 	var li = document.createElement("li");
     var link = document.createElement("a");             
-    var text = document.createTextNode("logout");
+    var text = document.createTextNode("Info");
+    link.appendChild(text);
+    //link.onclick = logout;
+    li.appendChild(link);
+    drop.appendChild(li);
+    li = document.createElement("li");
+    link = document.createElement("a");             
+    text = document.createTextNode("Items");
+    link.appendChild(text);
+    //link.onclick = logout;
+    li.appendChild(link);
+    drop.appendChild(li);
+    li = document.createElement("li");
+    link = document.createElement("a");             
+    text = document.createTextNode("Logout");
     link.appendChild(text);
     link.onclick = logout;
     li.appendChild(link);
@@ -25,6 +40,11 @@ if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
 	loadMsg(getCookie("uid"),getCookie("token"));
 	post =document.getElementById('post');
 	post.onclick = addnewpost; 
+
+}else{
+	in1 =document.getElementById('in');
+	in1.href ='http://'+ window.location.host+'/login.html'; 
+	console.log(in1);
 }
 
 
@@ -46,10 +66,22 @@ function addnewpost() {
 	console.log("add new post");
 }
 function login() {
+	console.log("login");
 	window.location.href = 'http://'+ window.location.host+'/login.html'; 
 }
 function logout() {
-	console.log("ha");
+	$.getJSON('http://'+ window.location.host + '/logout', {
+        uid: getCookie("uid"),
+        token: getCookie("token"),
+      }, function(data) { 
+      		console.log(data);
+      		if(data.data=='ok'){
+      			setCookie("uid","",0);
+      			setCookie("name","",0);
+      			setCookie("token","",0);
+      			window.location.href = 'http://'+ window.location.host+'/market.html'; 
+      		}
+      });
 }
 function viewUserinfo(){
 	console.log("popup user info and history");
