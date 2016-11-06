@@ -34,12 +34,14 @@ function getUser(){
 	      			sess.appendChild(div);
 	      		}
 
-	      		u_data = data["u_info"]
+	      		u_data = data["u_info"];
+	      		u_data["pw"]=u_data["pw"].replace(/[\d]|a|e|i|o|u/gi,"*");
 	      		uForm = document.forms['user_form'];
 	      		uForm["name"].value=u_data["name"];
 	      		uForm["phone"].value=u_data["phone"];
 	      		uForm["email"].value=u_data["email"];
-	      		uForm["pw"].value=u_data["pw"].replace(/[\d]|a|e|i|o|u/gi,"*");
+	      		uForm["pw"].value=u_data["pw"];
+
 	      		upbtn=document.getElementById('upbtn');
 	      		upbtn.onclick=submitUpadte;
 
@@ -57,9 +59,10 @@ function deleteSession () {
 	if(confirm('Are you sure you want to delete this session?')){
 		data={};
 		if( getCookie("uid")!=""){
-			data["token"]=getCookie("token");
+
+		
 			data["d_token"]=this.parentNode.id;
-			console.log(data);
+			// console.log(data);
 			$.post('http://'+ window.location.host + '/deleteSession', {
 				uid:getCookie("uid"),
 				token:getCookie("token"),
@@ -84,5 +87,28 @@ function submitUpadte () {
 	if(this.parentNode.phone.value!=u_data["phone"]) updata["phone"]=this.parentNode.phone.value;
 	if(this.parentNode.email.value!=u_data["email"]) updata["email"]=this.parentNode.email.value;
 	if(this.parentNode.pw.value!=u_data["pw"]) updata["pw"]=this.parentNode.pw.value;
-	console.log(updata);
+
+	//no update,return
+	if (Object.keys(updata).length==0) return false;
+	
+	updata["uid"]=getCookie("uid");
+	updata["token"]=getCookie("token");
+	$.post('http://'+ window.location.host + '/updateUser', updata
+			, function(data) {
+				
+				if(data.data=="error") return false;
+
+				if("name" in updata){
+					login =document.getElementById('login');
+					login.innerHTML=updata["name"];
+					setCookie("name",updata["name"],360);
+				}
+				getUser();
+			},'json');
+
+
+	//console.log("name" in updata);
+
+
+
 }

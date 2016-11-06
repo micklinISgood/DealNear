@@ -274,6 +274,25 @@ def logout():
  
   return jsonify(data="ok")
 
+@app.route('/updateUser', methods=['POST'])
+def updateUser():
+
+  uid = request.form['uid']
+  token = request.form['token']
+  print request.form
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
+
+
+
+  for k,v in request.form.items():
+    if k=="uid" or k=="token": continue
+    g.conn.execute("Update users set "+k+"=%s where uid=%s",v,uid)
+
+  return jsonify(data="ok")
+
+
 @app.route('/deleteSession', methods=['POST'])
 def deleteSession():
 

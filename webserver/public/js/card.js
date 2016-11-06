@@ -14,7 +14,7 @@ if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
 
 
 	login =document.getElementById('login');
-	login.innerHTML=getCookie("name").substring(1,getCookie("name").length-1);
+	login.innerHTML=getCookie("name").replace(/\"/g,"");
 	drop =document.getElementById('drop2');
 	drop.innerHTML="";
 	var li = document.createElement("li");
@@ -62,11 +62,7 @@ $('a[href="#1"]').click(function(){
     showMain();
 });
 
-function showMain () {
-	$("#post_form").hide();
-	$("#user_info").hide();
-	$("#content").show();
-}
+
 
 var searchBox = new google.maps.places.SearchBox(input);
  google.maps.event.addListener(searchBox,'places_changed', function(){
