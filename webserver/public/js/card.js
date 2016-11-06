@@ -104,7 +104,7 @@ function handlePosting(){
 	}
 
 }
-
+//clone location selector
 $(document).on('click', '.btn-add', function(e)
     {
         e.preventDefault();
@@ -128,6 +128,8 @@ $(document).on('click', '.btn-add', function(e)
         newEntry.find('input')[0].value='';
         newEntry.find('input')[1].value='';
         newEntry.find('input')[2].value='';
+        newEntry.find('input')[1].placeholder="click on selector";
+        newEntry.find('input')[2].placeholder="click on selector";
 
         newEntry.find('button')[0].onclick = openMap;
         controlForm.find('.entry:not(:last) .btn-add')

@@ -83,7 +83,8 @@
 
 <div class="w3 container w3-row w3-padding w3-margin-top" id="content"></div>
 <div class="w3 container w3-row w3-padding w3-margin-top" id="post_form">
-<div class="w3-card-12 w3-white" style="width: 100%; padding: 2%;">
+<div class="w3-third">
+<div class="w3-card-12 w3-white" style="width: 95%; padding: 2%;">
  <div id="wrapper">
         <button button type="button" class="btn btn-xs btn-danger pull-right" id ="cancelbtn"><span class="glyphicon  glyphicon-remove">close</span></button><br>
         <div class="control-group" id="fields">
@@ -96,14 +97,14 @@
                     <input type="text" name="title" required autocomplete="off" placeholder="Product Title"/>
                 </div><br>
                 <div>
-                    <input type="number" min="0" step="0.1" name="price" required autocomplete="off" placeholder="Price you ask, eg. a number"/>
+                    <input type="number" min="0" step="0.1" name="price" required autocomplete="off" placeholder="Price you ask"/>
                 </div><br>
                 <div id="controlform">
-                 <div class="entry input-group col-xs-3" >
+                 <div class="entry input-group" >
                         <button class="form-control" name="location[0]" type="button" id="locbtn1">Location selector</button>
                         <input class="form-control" name="location[0][name]" required type="text" placeholder="Set location name" />
-                        <input class="form-control" name="location[0][lat]"  type="number" min="-90" step="0.00000001" max="90" value="" required/>
-                        <input class="form-control" name="location[0][lng]"  type="number" min="-180" step="0.00000001" max="180" value="" required/>
+                        <input class="form-control" name="location[0][lat]"  type="number" min="-90" step="0.00000001" max="90" value="" required placeholder="click on selector"/>
+                        <input class="form-control" name="location[0][lng]"  type="number" min="-180" step="0.00000001" max="180" value="" placeholder="click on selector" required/>
                       <span class="input-group-btn">
                             <button class="btn btn-success btn-add" type="button">
                                 <span class="glyphicon glyphicon-plus"></span>
@@ -126,7 +127,11 @@
         </div>
     </div>
 </div>
- <div id="map-selector" style="width: 500px; height: 400px;"></div>
+</div>
+<div class="w3-third">
+<div class="w3-card-12 w3-white" style="width: 95%; padding: 2%;">
+ <div id="map-selector" style="width: 500px; height: 400px;"></div></div>
+</div>
 </div>  
 
  
