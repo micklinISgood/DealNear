@@ -274,6 +274,38 @@ def logout():
  
   return jsonify(data="ok")
 
+@app.route('/getUser', methods=['GET'])
+def getUser():
+  uid = request.args.get('uid', -1, type=int)
+  token = request.args.get('token', "", type=str)
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
+  
+  ret = {}
+
+  cursor = g.conn.execute("Select * from session where uid=%s and location<>%s",uid,token)
+  ret["session"]=[]
+  for result in cursor:
+      data={}
+      data["time"]=result["time"]
+      data["type"]=result["type"]
+      data["token"]=result["location"]
+      ret["session"].append(data)
+
+  cursor = g.conn.execute("Select * from users where uid=%s",uid)
+  ret["u_info"]={}
+  for result in cursor:
+      ret["u_info"]["phone"]=result["phone"]
+      ret["u_info"]["name"]=result["name"]
+      ret["u_info"]["email"]=result["email"]
+      ret["u_info"]["pw"]=result["pw"]
+  
+  return jsonify(data=ret)
+
+
+
+
 @app.route('/inbox', methods=['GET'])
 def inbox():
   uid = request.args.get('uid', -1, type=int)

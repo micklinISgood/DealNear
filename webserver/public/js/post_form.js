@@ -59,6 +59,7 @@ $("#cancelbtn").click(function(){
 
 function backMarket () {
 	 $("#content").show();
+     $("#user_info").hide();
 	 $("#post_form").hide(); 
 	  selector_btn=null;  
 
@@ -82,8 +83,7 @@ function addMarker(location, map) {
   });
 }
 function addnewpost() {
-	 $("#content").hide();
-	 $("#post_form").show();
+	 showPost();
 	 map = new google.maps.Map(document.getElementById('map-selector'), {
     	zoom: 15,
     	center: {lat: parseFloat(getCookie("lat")), lng: parseFloat(getCookie("lng"))},

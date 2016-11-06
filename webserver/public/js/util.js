@@ -18,3 +18,23 @@ function getCookie(cname) {
     }
     return "";
 }
+function showUser(){
+	$("#post_form").hide();
+	$("#user_info").show();
+	$("#content").hide();
+}
+function showMain(){
+	$("#post_form").hide();
+	$("#user_info").hide();
+	$("#content").show();
+}
+function showPost(){
+	$("#post_form").show();
+	$("#user_info").hide();
+	$("#content").hide();
+}
+function epoch2date(epoch){
+	var d = new Date(0);
+    d.setUTCSeconds(epoch);
+	return d.toString().substring(0,21);
+}

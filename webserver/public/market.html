@@ -34,7 +34,7 @@
  <div class="bs-example">
     <nav id = "bar" class="navbar navbar-default" role="navigation">
 
-  <a class="navbar-brand"> Deal Near</a>
+  <a class="navbar-brand" href="#1"> Deal Near</a>
 
     <ul class="nav navbar-nav navbar-left">
       <li><a href="/">Map</a></li>
@@ -82,6 +82,7 @@
 </div> 
 
 <div class="w3 container w3-row w3-padding w3-margin-top" id="content"></div>
+
 <div class="w3 container w3-row w3-padding w3-margin-top" id="post_form">
 <div class="w3-third">
 <div class="w3-card-12 w3-white" style="width: 95%; padding: 2%;">
@@ -133,6 +134,14 @@
 <button button type="button" class="btn btn-xs btn-danger pull-right" id ="cancelbtn"><span class="glyphicon  glyphicon-remove">Cancel</span></button><br></div>
 </div>  
 
+<div class="w3 container w3-row w3-padding w3-margin-top" id="user_info">
+  <div class="w3-third">
+    <div class="w3-card-12 w3-white" style="width: 95%; padding: 2%;" id="upInfo" ></div>
+  </div>
+   <div class="w3-third">
+    <div class="w3-card-12 w3-white" style="width: 95%; padding: 2%;" ><span >Current Sessions</span><div id="session"></div></div>
+  </div>
+</div>
  
     <!-- Modal for full size images on click-->
     <div id="modal01" class="w3-modal w3-black w3-padding-16" onclick="this.style.display='none'">
@@ -164,6 +173,7 @@
 <script type="text/javascript" src="/js/card.js"></script>
 <script type="text/javascript" src="/js/post_form.js"></script>
 <script type="text/javascript" src="/js/logout.js"></script>
+<script type="text/javascript" src="/js/user.js"></script>
 <!-- <script src="js/locationpicker.jquery.js"></script> -->
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXgIDmoWXLjZDLWUaUI6Xl_9987AaJO_U&libraries=places&callback=init">

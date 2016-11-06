@@ -2,7 +2,7 @@ var input, map, selector,infowindow, selector_btn;
 function init() {
 
 input = document.getElementById('pac-input');
-$("#post_form").hide();
+showMain();
 
 if(getCookie("lat")==""){
    	window.location.href = 'http://'+ window.location.host; 
@@ -21,7 +21,7 @@ if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
     var link = document.createElement("a");             
     var text = document.createTextNode("Info");
     link.appendChild(text);
-    //link.onclick = logout;
+    link.onclick = viewUserinfo
     li.appendChild(link);
     drop.appendChild(li);
     li = document.createElement("li");
@@ -58,8 +58,15 @@ if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
 	iframe.onload = login;
 
 }
+$('a[href="#1"]').click(function(){
+    showMain();
+});
 
-
+function showMain () {
+	$("#post_form").hide();
+	$("#user_info").hide();
+	$("#content").show();
+}
 
 var searchBox = new google.maps.places.SearchBox(input);
  google.maps.event.addListener(searchBox,'places_changed', function(){
@@ -85,9 +92,7 @@ function login() {
  
 }
 
-function viewUserinfo(){
-	console.log("popup user info and history");
-}
+
 function loadPost(_lat,_lng) {
 	tmp_con = document.getElementById('content');
 	tmp_con.innerHTML = "";
