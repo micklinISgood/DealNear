@@ -22,16 +22,25 @@ function showUser(){
 	$("#post_form").hide();
 	$("#user_info").show();
 	$("#content").hide();
+	$("#items").hide();
 }
 function showMain(){
 	$("#post_form").hide();
 	$("#user_info").hide();
 	$("#content").show();
+	$("#items").hide();
 }
 function showPost(){
 	$("#post_form").show();
 	$("#user_info").hide();
 	$("#content").hide();
+	$("#items").hide();
+}
+function showItems(){
+	$("#post_form").hide();
+	$("#user_info").hide();
+	$("#content").hide();
+	$("#items").show();
 }
 function epoch2date(epoch){
 	var d = new Date(0);

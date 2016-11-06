@@ -369,26 +369,21 @@ def inbox():
 
   return jsonify(data=ret)
 
-@app.route('/near_post', methods=['GET'])
-def near_post():
-  lat = request.args.get('lat', 1000, type=float)
-  lng = request.args.get('lng', 1000, type=float)
+
+@app.route('/userItems', methods=['GET'])
+def userItems():
+
   uid = request.args.get('uid', -1, type=int)
-  if lat > 90 or lat < -90 or lng >180 or lng <-180: return jsonify(data="input error")
-  print uid
+  token = request.args.get('token', "", type=str)
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
 
-  _top = lat +0.01
-  _bottom = lat -0.01
-  _left = lng -0.01
-  _right = lng +0.01
 
-  query ="select * from post where status = 0 and pid IN (\
-        select pid from set_ploc where lid IN (\
-        select lid from locations where latitude >= %s and \
-        longitude >= %s and  latitude <= %s and longitude <= %s )\
-        ) order by cr_time desc;"
 
-  cursor = g.conn.execute(query,_bottom, _left, _top, _right)
+  query ="select post.* from post,create_post as c where c.uid=%s and c.pid=post.pid"
+
+  cursor = g.conn.execute(query,uid)
   ret =[]
   for result in cursor:
     data ={}
@@ -423,6 +418,36 @@ def near_count():
   cursor.close()
 
   return jsonify(data=ret)
+
+@app.route('/near_post', methods=['GET'])
+def near_post():
+  lat = request.args.get('lat', 1000, type=float)
+  lng = request.args.get('lng', 1000, type=float)
+  uid = request.args.get('uid', -1, type=int)
+  if lat > 90 or lat < -90 or lng >180 or lng <-180: return jsonify(data="input error")
+  print uid
+
+  _top = lat +0.01
+  _bottom = lat -0.01
+  _left = lng -0.01
+  _right = lng +0.01
+
+  query ="select * from post where status = 0 and pid IN (\
+        select pid from set_ploc where lid IN (\
+        select lid from locations where latitude >= %s and \
+        longitude >= %s and  latitude <= %s and longitude <= %s )\
+        ) order by cr_time desc;"
+
+  cursor = g.conn.execute(query,_bottom, _left, _top, _right)
+  ret =[]
+  for result in cursor:
+    data ={}
+    getPostById(result, data)
+    ret.append(data)  
+  cursor.close()
+
+  return jsonify(data=ret)
+
 
 
 @app.route('/login', methods=['POST'])

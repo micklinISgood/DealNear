@@ -28,7 +28,7 @@ if( getCookie("uid")!="" && getCookie("token")!="" && getCookie("name")!=""){
     link = document.createElement("a");             
     text = document.createTextNode("Items");
     link.appendChild(text);
-    //link.onclick = logout;
+    link.onclick = viewItems;
     li.appendChild(link);
     drop.appendChild(li);
     li = document.createElement("li");
@@ -178,7 +178,7 @@ function loadPost(_lat,_lng) {
 			}
 
 			iDiv.appendChild(innerDiv);
-			document.getElementById('content').appendChild(iDiv);
+			tmp_con.appendChild(iDiv);
          }
          
      });
