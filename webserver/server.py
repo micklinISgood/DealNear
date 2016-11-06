@@ -127,6 +127,7 @@ def getPostById(result, data):
     data["pid"]=result["pid"]
     data["title"]=result["title"]
     data["cr_time"]=result["cr_time"]
+    data["status"]=result["status"]
     l_cursor = g.conn.execute("Select name from locations where lid in (Select lid from set_ploc where pid = %s)", result["pid"])
     loc_str = ""
     for locs in l_cursor:
@@ -381,7 +382,7 @@ def userItems():
 
 
 
-  query ="select post.* from post,create_post as c where c.uid=%s and c.pid=post.pid"
+  query ="select post.* from post,create_post as c where c.uid=%s and c.pid=post.pid and post.status <2 order by post.status asc"
 
   cursor = g.conn.execute(query,uid)
   ret =[]

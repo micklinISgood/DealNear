@@ -1,5 +1,5 @@
 
-
+var items_data;
 function viewItems(){
 	showItems();
 
@@ -14,6 +14,7 @@ function viewItems(){
       	tmp_con.innerHTML = "";
 
       	 _data = data.data;
+      	 items_data =_data; 
       	 if(_data=="error"){
       	 	logout();
       	 	return false;
@@ -26,6 +27,16 @@ function viewItems(){
 			var innerDiv = document.createElement('div');
 			innerDiv.className = 'w3-card-12 w3-white';
 			innerDiv.style="width:95%;padding:2%";
+			var btn = document.createElement('button');
+      		btn.className= "btn btn-xs w3-gray pull-right";
+  			btn.onclick=deletePost;
+  			btn.id =_data[i]["pid"];
+  			sp = document.createElement('span');
+  			sp.className = "glyphicon  glyphicon-remove";
+  			sp.innerHTML= "Delete";
+  			btn.appendChild(sp);
+  			innerDiv.appendChild(btn);
+
 			for ( var j in _data[i]["pics"]){
 				var img = document.createElement('img');
 				img.className ='w3-border w3-image'
@@ -54,42 +65,55 @@ function viewItems(){
 			var tr3 = document.createElement('tr');
 			var td3 = document.createElement('td');
 			td3.align="left";
-			td3.innerHTML = "<b>Price</b>: "+_data[i]["price"];
+			td3.innerHTML = "<b>Price</b>: ";
 			tr3.appendChild(td3);
 			var td4 = document.createElement('td');
 			td4.align="right";
-			td4.innerHTML = "Watch: "+_data[i]["watch"];
+			var price = document.createElement('input');
+			price.type="number"
+			price.min="0"
+			price.step="1"
+			price.id ="price"+_data[i]["pid"];
+			price.value = _data[i]["price"];
+			td4.appendChild(price);
 			tr3.appendChild(td4);
-			var tr4 = document.createElement('tr');
-			tr4.innerHTML = "@"+ _data[i]["locs"];
+		
 
 			var tr5 = document.createElement('tr');
 			tr5.innerHTML = "<br/>"
-
+			var tr6 = document.createElement('tr');
+			var td4 = document.createElement('td');
+			td4.align="left";
+			var btn = document.createElement('button');
+			btn.className = "w3-btn w3-indigo";
+			btn.id = i;
+			btn.onclick = updatePrice;
+			btn.innerHTML = "Update";
+			td4.appendChild(btn);
+			tr6.appendChild(td4);
+			if(_data[i]["status"]==0){
+				var td5 = document.createElement('td');
+				td5.align="right";
+				var btn = document.createElement('button');
+				btn.className = "w3-btn w3-red";
+				btn.id = _data[i]["pid"];
+				btn.onclick = markAsSold;
+				btn.innerHTML = "Mark as Sold";
+				td5.appendChild(btn);
+			}
+			tr6.appendChild(td5);
+			
 
 			t.appendChild(tr0);
 			t.appendChild(tr1);
-			t.appendChild(tr2);
+			//t.appendChild(tr2);
 			t.appendChild(tr3);
-			t.appendChild(tr4);
 			t.appendChild(tr5);
+			t.appendChild(tr6);
 			innerDiv.appendChild(t);
 
 			
 
-			var btn = document.createElement('button');
-			btn.className = "w3-btn w3-indigo";
-			btn.id = _data[i]["p_uid"]+","+_data[i]["pid"];
-			btn.onclick = sendMsg;
-			btn.innerHTML = "Update";
-			innerDiv.appendChild(btn);
-
-			var btn = document.createElement('button');
-			btn.className = "w3-btn w3-red";
-			btn.id = _data[i]["p_uid"]+","+_data[i]["pid"];
-			btn.onclick = sendMsg;
-			btn.innerHTML = "Sold";
-			innerDiv.appendChild(btn);
 			
 
 			iDiv.appendChild(innerDiv);
@@ -98,4 +122,15 @@ function viewItems(){
          
      });
 
-};
+}
+function updatePrice () {
+	console.log(items_data[this.id]);
+	console.log($("#price"+items_data[this.id]["pid"]));
+}
+function markAsSold(){
+	console.log(this.id);
+}
+function deletePost() {
+	console.log(this.id);
+}
+
