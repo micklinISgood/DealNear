@@ -4,13 +4,13 @@ function init() {
 input = document.getElementById('pac-input');
 showMain();
 
-if(getCookie("lat")==""){
+if(getCookie("lat")=="" ||getCookie("lng")==""){
    	window.location.href = 'http://'+ window.location.host; 
 }else{
     loadPost(getCookie("lat"),getCookie("lng"));
 }
 
-if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
+if( getCookie("uid")!="" && getCookie("token")!="" && getCookie("name")!=""){
 
 
 	login =document.getElementById('login');
@@ -56,12 +56,23 @@ if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
 	iframe.setAttribute("src", link);
 	document.getElementById("drop2").appendChild(iframe);
 	iframe.onload = login;
+	$("#inbox").hide();
+	post =document.getElementById('post');
+	post.onclick = requireLogin; 
+
+
 
 }
 $('a[href="#1"]').click(function(){
     showMain();
 });
 
+function requireLogin () {
+	$('#drop2').show();
+	
+	//document.getElementById('login').click();
+	// $("#login").click();
+}
 
 
 var searchBox = new google.maps.places.SearchBox(input);
@@ -182,7 +193,21 @@ function clickPhoto(element) {
   captionText.innerHTML = this.alt;
 }
 function sendMsg(element) {
-	// console.log(this.id);
+
+	if(getCookie("uid")=="" ||getCookie("token")==""){
+		document.getElementById('drop2').click();
+		// $('#login').addClass('open');
+		// // $('#login').click();
+		// // $('#login').dropdown('toggle');
+		// $('#login').attr('aria-expanded', true).focus();
+		// $('#login').dropdown('toggle');
+
+		$('#drop2').show();
+
+		// console.log($('.dropdown-toggle')[1]);
+		return false;
+	}
+
 	ids = this.id.split(",");
 	// console.log(ids);
 	$.getJSON('http://'+ window.location.host + '/sendMsg', {

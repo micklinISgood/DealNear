@@ -21,8 +21,8 @@ function getUser(){
 	      			var div = document.createElement('div');
 	      			div.id= data["session"][i]["token"];
 	      			var li = document.createElement('li');
-	      			li.innerHTML = data["session"][i]["type"]+" , "+epoch2date(data["session"][i]["time"])
-	      			div.appendChild(li);
+	      			li.innerHTML = data["session"][i]["type"]+" , "+epoch2date(data["session"][i]["time"])+" "
+	      			
 
 	      			if(data["session"][i]["token"] !=cur_token){
 		      			var btn = document.createElement('button');
@@ -32,9 +32,9 @@ function getUser(){
 		      			sp.className = "glyphicon  glyphicon-remove";
 		      			sp.innerHTML= "Delete";
 		      			btn.appendChild(sp);
-		      			div.appendChild(btn);
+		      			li.appendChild(btn);
 	      			}
-	      			
+	      			div.appendChild(li);
 	      			sess.appendChild(div);
 	      		}
 
