@@ -1,5 +1,6 @@
 var input, map, selector,infowindow, selector_btn;
 function init() {
+
 input = document.getElementById('pac-input');
 $("#post_form").hide();
 
@@ -42,13 +43,10 @@ if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
 	post.onclick = addnewpost; 
 	loc =document.getElementById('locbtn1');
 	loc.onclick = openMap; 
-	// postbtn =document.getElementById('submitbtn');
-	// postbtn.onclick = handlePosting;
+
 
 }else{
-	// in1 =document.getElementById('in');
-	// in1.className = "button";
-	// in1.onclick =login;
+
 	var link = 'http://'+ window.location.host+'/login.html';
 	var iframe = document.createElement('iframe');
 	iframe.frameBorder=0;
@@ -58,12 +56,7 @@ if( !(getCookie("uid")=="" || getCookie("token")=="" || getCookie("name")=="")){
 	iframe.setAttribute("src", link);
 	document.getElementById("drop2").appendChild(iframe);
 	iframe.onload = login;
-	$('#randomid').contents().find('button').click(function() {
-    	alert('submit');
-	});
-	// var stuffWasChanged = iframe.contentDocument.stuffWasChanged;
-	// if (stuffWasChanged == "true") window.location.reload();
-	//window.open(in1.href, "login", 'width=400,height=600,scrollbars=yes'); 
+
 }
 
 
@@ -75,7 +68,7 @@ var searchBox = new google.maps.places.SearchBox(input);
     if (!place.geometry) {
       return;
     }
-   
+    backMarket(); 
     loadPost(place.geometry.location.lat(),place.geometry.location.lng())
    
   });
@@ -84,145 +77,14 @@ var searchBox = new google.maps.places.SearchBox(input);
 
 }
 
-function openMap(){
-		if(selector_btn!=null) selector_btn.innerHTML="Location selector";
-		selector_btn = this;
-		selector_btn.innerHTML="Click on map for change";
-	    //var myLatLng = {lat: parseFloat(_data[i]["latitude"]), lng: parseFloat(_data[i]["longitude"])};
 
-	    if(selector==null){
-    		addMarker(map.getCenter(), map);
-    	}else{
-    		selector.setPosition(map.getCenter());
-    	}
-}
-function handlePosting(){
-	all = this.parentNode.childNodes[1].childNodes[0];
-	for(var i in all){
-	
-		console.log(all[i]);
-	}
-
-}
-//clone location selector
-$(document).on('click', '.btn-add', function(e)
-    {
-        e.preventDefault();
-
-
-        var controlForm = $('#controlform'),
-            currentEntry = $(this).parents('.entry:first'),
-            newEntry = $(currentEntry.clone()).appendTo(controlForm);
-
-        
-        cur_name = newEntry.find('button')[0].name;
-        newEntry.find('button')[0].innerHTML="Location selector";
-        id = cur_name.substring(cur_name.lastIndexOf("[")+1,cur_name.length-1);
-        id = parseInt(id)+1;
-        newEntry.find('button')[0].name = "location["+id+"]"; 
-        
-        newEntry.find('input')[0].name = "location["+id+"][name]";
-        newEntry.find('input')[1].name = "location["+id+"][lat]";
-        newEntry.find('input')[2].name = "location["+id+"][lng]";
-        
-        newEntry.find('input')[0].value='';
-        newEntry.find('input')[1].value='';
-        newEntry.find('input')[2].value='';
-        newEntry.find('input')[1].placeholder="click on selector";
-        newEntry.find('input')[2].placeholder="click on selector";
-
-        newEntry.find('button')[0].onclick = openMap;
-        controlForm.find('.entry:not(:last) .btn-add')
-            .removeClass('btn-add').addClass('btn-remove')
-            .removeClass('btn-success').addClass('btn-danger')
-            .html('<span class="glyphicon glyphicon-minus"></span>');
-    }).on('click', '.btn-remove', function(e)
-    {
-		$(this).parents('.entry:first').remove();
-
-		e.preventDefault();
-		return false;
-	});
-$("#cancelbtn").click(function(){
-       $("#content").show();
-	   $("#post_form").hide(); 
-	   selector_btn=null;        
-    });
-function addHidden(theForm, key, value) {
-    // Create a hidden input element, and append it to the form:
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = value;
-    theForm.appendChild(input);
-}
-function addnewpost() {
-	 $("#content").hide();
-	 $("#post_form").show();
-	 map = new google.maps.Map(document.getElementById('map-selector'), {
-    	zoom: 15,
-    	center: {lat: parseFloat(getCookie("lat")), lng: parseFloat(getCookie("lng"))},
-    	mapTypeId: google.maps.MapTypeId.ROADMAP
-  	});
-	theForm = document.forms['item_form'];
-
- 
-	theForm["uid"].value=getCookie("uid"); 	
-	theForm["token"].value=getCookie("token");
-
-	google.maps.event.addListener(map, 'click', function(event) {
-		if(selector_btn==null){
-			alert("select a location selector from the form first");
-		}else{
- 
-    	selector.setPosition(event.latLng);
-    	
-
-
-    	latQuery= selector_btn.name+"[lat]";
-    	lngQuery= selector_btn.name+"[lng]";
-    	console.log(latQuery);
-    	theForm[latQuery].value=event.latLng.lat().toFixed(5);
-    	theForm[lngQuery].value=event.latLng.lng().toFixed(5);
-    	}
-  	});
-  	
-	
-	
-}
-function getMarker() {
-	console.log(this);
-}
-function addMarker(location, map) {
-  // Add the marker at the clicked location, and add the next-available label
-  // from the array of alphabetical characters.
-    selector = new google.maps.Marker({
-    position: location,
-    map: map
-  });
-}
 function login() {
 
-	if(this.contentWindow.location=='http://'+ window.location.host+'/market.html')
-		window.location.reload();
-	//console.log("login");
-	//$('#my_popup').popup();
-	//window.open('http://'+ window.location.host+'/login.html', "login", 'width=400,height=450,scrollbars=yes');  
+	if(this.contentWindow.location !='http://'+ window.location.host+'/login.html')
+	window.location.reload();
+ 
 }
-function logout() {
-	$.getJSON('http://'+ window.location.host + '/logout', {
-        uid: getCookie("uid"),
-        token: getCookie("token"),
-      }, function(data) { 
-      		console.log(data);
-      		if(data.data=='ok'){
-      			setCookie("uid","",0);
-      			setCookie("name","",0);
-      			setCookie("token","",0);
-      			window.location.href = 'http://'+ window.location.host+'/market.html'; 
-      		}
-      });
-}
+
 function viewUserinfo(){
 	console.log("popup user info and history");
 }
@@ -235,6 +97,7 @@ function loadPost(_lat,_lng) {
         uid: getCookie("uid")
       }, function(data) {
       	 _data = data.data;
+      	 uid = getCookie("uid");
          for(var i in _data){
          	var iDiv = document.createElement('div');
 			iDiv.id = _data[i]["pid"];
@@ -291,12 +154,16 @@ function loadPost(_lat,_lng) {
 			t.appendChild(tr5);
 			innerDiv.appendChild(t);
 
-			var btn = document.createElement('button');
-			btn.className = "w3-btn w3-indigo";
-			btn.id = _data[i]["p_uid"]+","+_data[i]["pid"];
-			btn.onclick = sendMsg;
-			btn.innerHTML = "Contact "+_data[i]["p_name"];
-			innerDiv.appendChild(btn);
+			//prevent self-msg
+			if(_data[i]["p_uid"]!=uid){
+
+				var btn = document.createElement('button');
+				btn.className = "w3-btn w3-indigo";
+				btn.id = _data[i]["p_uid"]+","+_data[i]["pid"];
+				btn.onclick = sendMsg;
+				btn.innerHTML = "Contact "+_data[i]["p_name"];
+				innerDiv.appendChild(btn);
+			}
 
 			iDiv.appendChild(innerDiv);
 			document.getElementById('content').appendChild(iDiv);

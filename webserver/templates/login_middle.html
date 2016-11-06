@@ -1,0 +1,12 @@
+ {% if data %}
+      <script>
+      var data =  "{{ data }}";
+      if( data =="ok"){
+      	alert("login successfully");
+      	window.location.href = 'http://'+ window.location.host+'/loginTmp.html';
+  	  }else{
+  	  	alert("login failed");
+      	window.location.href = 'http://'+ window.location.host+'/login.html';
+  	  }	
+      </script>
+ {% endif %}

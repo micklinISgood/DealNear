@@ -372,14 +372,16 @@ def login():
         ltime = int(time.time())
         token = hashlib.sha224(ltype+str(ltime)+row["name"]+request.remote_addr).hexdigest()
         g.conn.execute("INSERT into session values(%s,%s,%s,%s)", row["uid"], ltime ,ltype, token);
-        redirect_to_index = redirect('/market.html')
+        redirect_to_index = render_template('/login_middle.html',data="ok")
         response = app.make_response(redirect_to_index )  
         response.set_cookie('uid',value=str(row["uid"]))
         response.set_cookie('name',value=str(row["name"]))
         response.set_cookie('token',value=token)
         return response
     else:
-        return redirect('/login.html')
+        return render_template('/login_middle.html',data="error")
+
+
 @app.route('/post_item', methods=['POST'])
 def post_item():
     
@@ -433,7 +435,7 @@ def post_item():
 
 
         
-        url="https://pixabay.com/static/uploads/photo/2014/06/03/19/38/road-sign-361513_640.jpg"
+        url="http://learnbonds.com/wp-content/uploads/Tesla-Model-S.jpg"
         g.conn.execute("Insert into pictures (pid, url) values (%s,%s)",pid,url)
 
   
