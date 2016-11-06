@@ -3,12 +3,16 @@
 function viewItems(){
 	showItems();
 
-	tmp_con = document.getElementById('items');
-	tmp_con.innerHTML = "";
+	tmp_con = document.getElementById('item_content');
+	
+	$("#loadimg").show();
 	$.getJSON('http://'+ window.location.host + '/userItems', {
         token:getCookie("token"),
         uid: getCookie("uid")
       }, function(data) {
+      	
+      	tmp_con.innerHTML = "";
+
       	 _data = data.data;
       	 if(_data=="error"){
       	 	logout();
