@@ -1,5 +1,5 @@
+var u_data;
 function viewUserinfo(){
-	console.log("popup user info and history");
 	showUser ();
 	getUser();
 }
@@ -39,8 +39,9 @@ function getUser(){
 	      		uForm["name"].value=u_data["name"];
 	      		uForm["phone"].value=u_data["phone"];
 	      		uForm["email"].value=u_data["email"];
-	      		uForm["pw"].value=u_data["pw"];
-
+	      		uForm["pw"].value=u_data["pw"].replace(/[\d]|a|e|i|o|u/gi,"*");
+	      		upbtn=document.getElementById('upbtn');
+	      		upbtn.onclick=submitUpadte;
 
 	      	}else{
 	      		logout();	
@@ -48,6 +49,7 @@ function getUser(){
       			//document.getElementById('upInfo');
      });
 }
+
 function deleteSession () {
 	
 	l = document.getElementById(this.parentNode.id);
@@ -73,4 +75,14 @@ function deleteSession () {
 		}
 	}
 
+}
+
+function submitUpadte () {
+	//console.log(this.parentNode.name.value);
+	updata ={};
+	if(this.parentNode.name.value!=u_data["name"]) updata["name"]=this.parentNode.name.value;
+	if(this.parentNode.phone.value!=u_data["phone"]) updata["phone"]=this.parentNode.phone.value;
+	if(this.parentNode.email.value!=u_data["email"]) updata["email"]=this.parentNode.email.value;
+	if(this.parentNode.pw.value!=u_data["pw"]) updata["pw"]=this.parentNode.pw.value;
+	console.log(updata);
 }

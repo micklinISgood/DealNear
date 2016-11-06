@@ -12,7 +12,7 @@
     }
   
 
-    input:focus{
+   /* input:focus{
         background:#f5fcfe;
         text-indent: 0;
         z-index: 1;
@@ -32,4 +32,4 @@
         box-shadow:0 0 5px rgba(4, 129, 177, 0.5);
         opacity:0.6;
     }
-    
+    */
