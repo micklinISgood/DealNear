@@ -172,7 +172,7 @@ function addnewpost() {
 
 	google.maps.event.addListener(map, 'click', function(event) {
 		if(selector_btn==null){
-			alert("select an location selector from the form first");
+			alert("select a location selector from the form first");
 		}else{
  
     	selector.setPosition(event.latLng);
