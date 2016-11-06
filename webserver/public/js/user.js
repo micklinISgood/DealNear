@@ -15,10 +15,7 @@ function getUser(){
       		data=data.data;
       		if(data!="error"){
 	      		var sess = document.getElementById('session');
-	      		// var sp = document.createElement('span');	
-	      		// sp.innerHTML= "Current Sessions";
-	      		// sess.appendChild(sp);
-	      		// sess.appendChild(document.createElement('br'));
+	      
 
 	      		for(var i in data["session"]){
 	      			var div = document.createElement('div');
@@ -36,6 +33,15 @@ function getUser(){
 	      			div.appendChild(btn);
 	      			sess.appendChild(div);
 	      		}
+
+	      		u_data = data["u_info"]
+	      		uForm = document.forms['user_form'];
+	      		uForm["name"].value=u_data["name"];
+	      		uForm["phone"].value=u_data["phone"];
+	      		uForm["email"].value=u_data["email"];
+	      		uForm["pw"].value=u_data["pw"];
+
+
 	      	}else{
 	      		logout();	
 	      	}

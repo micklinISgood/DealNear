@@ -136,7 +136,44 @@
 
 <div class="w3 container w3-row w3-padding w3-margin-top" id="user_info">
   <div class="w3-third">
-    <div class="w3-card-12 w3-white" style="width: 95%; padding: 2%;" id="upInfo" ></div>
+    <div class="w3-card-12 w3-white" style="width: 95%; padding: 2%;" id="upInfo" >
+      <form action="/post_item" method="post" name="user_form">
+            <fieldset>
+
+                <div class="field-wrap">
+                <label>
+                    Name<span class="req">*</span>
+                </label>
+                    <input type="text" name="name" required autocomplete="off" placeholder="Name"/>
+                </div><br>
+
+                <div class="field-wrap">
+                <label>
+                    Phone<span class="req">*</span>
+                </label>
+                    <input type="number" min="0" step="0.1" name="phone" required autocomplete="off" placeholder="Phone"/>
+                </div><br>
+
+
+                <div class="field-wrap">
+                <label>
+                    Email<span class="req">*</span>
+                </label>
+                    <input type="email" name="email" required autocomplete="off" placeholder="Email"/>
+                </div><br>
+
+                <div class="field-wrap">
+                <label>
+                    Password<span class="req">*</span>
+                </label>
+                    <input type="text"  name ="pw" required autocomplete="off" placeholder="password"/>
+                </div><br>
+           
+         
+                  
+            </fieldset> 
+            <button class="w3-btn w3-indigo" id="submitbtn" type="submit" value="Send"align="right">Update</button>    
+        </form></div>
   </div>
    <div class="w3-third">
     <div class="w3-card-12 w3-white" style="width: 95%; padding: 2%;" ><span >Current Sessions</span><div id="session"></div></div>
