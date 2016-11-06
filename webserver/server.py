@@ -15,7 +15,7 @@ A debugger such as "pdb" may be helpful for debugging.
 Read about it online.
 """
 
-import os,time,requests,psycopg2,hashlib
+import os,time,requests,psycopg2,hashlib,re
 from sqlalchemy import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, jsonify, redirect, Response
@@ -380,7 +380,67 @@ def login():
         return response
     else:
         return redirect('/login.html')
+@app.route('/post_item', methods=['POST'])
+def post_item():
+    
+    uid = request.form['uid']
+    token = request.form['token']
+    title=request.form['title']
+    price=request.form['price']
+    location_dict ={}
+    for  k, v in request.form.items():
+      if "location" in k:
+          x=re.split('[\[\]]',k)
+          # print x
+          if x[1] not in location_dict.keys():
+            location_dict[x[1]]={}
+            location_dict[x[1]][x[3]]=v
+          else:
+            location_dict[x[1]][x[3]]=v
 
+  
+    cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+    row = cursor.fetchone()
+    # print row
+    if row != None:
+        lids=[]
+        for v in location_dict.values():
+          print v
+          try:
+            g.conn.execute("Insert into locations (name, latitude, longitude) values (%s,%s,%s)",v["name"],v["lat"],v["lng"])
+          except Exception as e:
+            print e
+          cursor = g.conn.execute("select lid from locations where latitude=%s and longitude=%s",v["lat"], v["lng"])
+          row = cursor.fetchone()[0]
+          lids.append(row)
+
+        cr_time = int(time.time())
+        g.conn.execute("Insert into post (title, cr_time, status) values (%s,%s,%s)",title,cr_time,0)
+        cursor = g.conn.execute("select pid from post where title=%s and cr_time=%s and status=0",title,cr_time)
+        pid = cursor.fetchone()[0]
+        for lid in lids:
+          g.conn.execute("Insert into set_ploc (lid,pid) values (%s,%s)",lid,pid)
+        g.conn.execute("Insert into create_post (uid,pid) values (%s,%s)",uid,pid)
+     
+        cursor = g.conn.execute("select * from price where amount=%s",price)
+        row = cursor.fetchone()
+        if row ==None:
+            try:
+              g.conn.execute("Insert into price (amount) values (%s)",price)
+            except:
+              pass
+        g.conn.execute("Insert into set_price (time, pid, amount) values (%s,%s,%s)",cr_time,pid,price)
+
+
+        
+        url="https://pixabay.com/static/uploads/photo/2014/06/03/19/38/road-sign-361513_640.jpg"
+        g.conn.execute("Insert into pictures (pid, url) values (%s,%s)",pid,url)
+
+  
+        return render_template('/middle.html',data="post successfully")
+    else:
+
+        return render_template('/middle.html',data="error")
 
 
 

@@ -158,7 +158,7 @@ function addnewpost() {
 	 $("#content").hide();
 	 $("#post_form").show();
 	 map = new google.maps.Map(document.getElementById('map-selector'), {
-    	zoom: 12,
+    	zoom: 15,
     	center: {lat: parseFloat(getCookie("lat")), lng: parseFloat(getCookie("lng"))},
     	mapTypeId: google.maps.MapTypeId.ROADMAP
   	});
@@ -180,8 +180,8 @@ function addnewpost() {
     	latQuery= selector_btn.name+"[lat]";
     	lngQuery= selector_btn.name+"[lng]";
     	console.log(latQuery);
-    	theForm[latQuery].value=event.latLng.lat();
-    	theForm[lngQuery].value=event.latLng.lng();
+    	theForm[latQuery].value=event.latLng.lat().toFixed(5);
+    	theForm[lngQuery].value=event.latLng.lng().toFixed(5);
     	}
   	});
   	
