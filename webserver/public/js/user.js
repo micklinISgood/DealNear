@@ -16,21 +16,25 @@ function getUser(){
       		if(data!="error"){
 	      		var sess = document.getElementById('session');
 	      
-
+	      		cur_token=getCookie("token");
 	      		for(var i in data["session"]){
 	      			var div = document.createElement('div');
 	      			div.id= data["session"][i]["token"];
 	      			var li = document.createElement('li');
 	      			li.innerHTML = data["session"][i]["type"]+" , "+epoch2date(data["session"][i]["time"])
 	      			div.appendChild(li);
-	      			var btn = document.createElement('button');
-	      			btn.className= "btn btn-xs btn-danger";
-	      			btn.onclick=deleteSession;
-	      			sp = document.createElement('span');
-	      			sp.className = "glyphicon  glyphicon-remove";
-	      			sp.innerHTML= "Delete";
-	      			btn.appendChild(sp);
-	      			div.appendChild(btn);
+
+	      			if(data["session"][i]["token"] !=cur_token){
+		      			var btn = document.createElement('button');
+		      			btn.className= "btn btn-xs btn-danger";
+		      			btn.onclick=deleteSession;
+		      			sp = document.createElement('span');
+		      			sp.className = "glyphicon  glyphicon-remove";
+		      			sp.innerHTML= "Delete";
+		      			btn.appendChild(sp);
+		      			div.appendChild(btn);
+	      			}
+	      			
 	      			sess.appendChild(div);
 	      		}
 

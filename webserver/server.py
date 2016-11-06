@@ -318,7 +318,7 @@ def getUser():
   
   ret = {}
 
-  cursor = g.conn.execute("Select * from session where uid=%s and location<>%s",uid,token)
+  cursor = g.conn.execute("Select * from session where uid=%s",uid)
   ret["session"]=[]
   for result in cursor:
       data={}
@@ -436,7 +436,7 @@ def login():
     if row != None:
         ltype = request.user_agent.browser
         ltime = int(time.time())
-        token = hashlib.sha224(ltype+str(ltime)+row["name"]+request.remote_addr).hexdigest()
+        token = hashlib.sha224(ltype+str(time.time())+row["name"]+request.remote_addr).hexdigest()
         g.conn.execute("INSERT into session values(%s,%s,%s,%s)", row["uid"], ltime ,ltype, token);
         redirect_to_index = render_template('/login_middle.html',data="ok")
         response = app.make_response(redirect_to_index )  
@@ -447,6 +447,31 @@ def login():
     else:
         return render_template('/login_middle.html',data="error")
 
+@app.route('/signUp', methods=['POST'])
+def signUp():
+    email=request.form['email']
+    pw=request.form['pw']
+    name=request.form['name']
+    phone=request.form['phone']
+
+    try:
+      cursor = g.conn.execute("INSERT INTO users (name, pw, phone, email) VALUES (%s,%s,%s,%s);\
+                                select * from users where uid = (select max(uid) from users);", name, pw, phone,email)
+      row = cursor.fetchone()
+      
+      if row != None:
+          ltype = request.user_agent.browser
+          ltime = int(time.time())
+          token = hashlib.sha224(ltype+str(time.time())+row["name"]+request.remote_addr).hexdigest()
+          g.conn.execute("INSERT into session values(%s,%s,%s,%s)", row["uid"], ltime ,ltype, token);
+          redirect_to_index = render_template('/login_middle.html',data="ok")
+          response = app.make_response(redirect_to_index )  
+          response.set_cookie('uid',value=str(row["uid"]))
+          response.set_cookie('name',value=str(row["name"]))
+          response.set_cookie('token',value=token)
+          return response
+    except:
+        return render_template('/login_middle.html',data="error")
 
 @app.route('/post_item', methods=['POST'])
 def post_item():
