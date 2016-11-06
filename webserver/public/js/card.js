@@ -202,20 +202,39 @@ function fireChatroom(){
 
 }
 function loadMsg(_uid,_token) {
+
+var inbox = document.getElementById('inbox_msg');
+inbox.innerHTML="";
+
 $.getJSON('http://'+ window.location.host + '/inbox', {
         uid: _uid,
         token:_token
       }, function(data) {
       	 _data = data.data;
+
+      	 if(_data=="error") return false;
+
          for(var i in _data){
-         	var d = new Date(0);
-    		d.setUTCSeconds(_data[i]["time"]);
-         	var u = document.getElementById('u'+i);
-         	u.innerHTML = _data[i]["name"]+", "+d.toString().substring(0,21);
-         	u.id = _data[i]["to_id"];
-         	u.onclick = fireChatroom;
-         	var m = document.getElementById('m'+i);
-         	m.innerHTML =_data[i]["text"];
+      
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            a.innerHTML = _data[i]["name"]+", "+epoch2date(_data[i]["time"]);
+            a.id= _data[i]["to_id"];
+            a.onclick=fireChatroom;
+            li.appendChild(a);
+            inbox.appendChild(li);
+      		var li = document.createElement('li');
+      		li.role="presentation";
+      		li.className="disabled";
+      		var a = document.createElement('a');
+      		a.innerHTML =_data[i]["text"];
+         	li.appendChild(a);
+         	inbox.appendChild(li);
+         	var li = document.createElement('li');
+      		li.role="separator";
+      		li.className="divider";
+         	inbox.appendChild(li);
+         
          }
          
       });
