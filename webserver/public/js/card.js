@@ -255,9 +255,7 @@ function uplodlocation () {
 function closeComment() {
 	$("#modal01").hide();
 }
-$('a[href="#closeComment"]').click(function(){
-	$("#modal01").hide();
-});
+
 
 function loadMsg(_uid,_token) {
 
