@@ -251,9 +251,7 @@ function uplodlocation () {
 	
 }
 
-function closeComment() {
-	$("#modal01").hide();
-}
+
 
 
 function loadMsg(_uid,_token) {
@@ -273,18 +271,11 @@ $.getJSON('http://'+ window.location.host + '/inbox', {
       
             var li = document.createElement('li');
             var a = document.createElement('a');
-            a.innerHTML = _data[i]["name"]+", "+epoch2date(_data[i]["time"]);
+            a.innerHTML = _data[i]["name"]+", "+epoch2date(_data[i]["time"])+"<br>"+_data[i]["text"];;
             a.id= _data[i]["to_id"];
             a.onclick=fireChatroom;
             li.appendChild(a);
             inbox.appendChild(li);
-      		var li = document.createElement('li');
-      		li.role="presentation";
-      		li.className="disabled";
-      		var a = document.createElement('a');
-      		a.innerHTML =_data[i]["text"];
-         	li.appendChild(a);
-         	inbox.appendChild(li);
          	var li = document.createElement('li');
       		li.role="separator";
       		li.className="divider";
