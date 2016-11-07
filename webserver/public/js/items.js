@@ -145,6 +145,7 @@ function markAsSold(){
 	uid= getCookie("uid");
 	token= getCookie("token");
 	if(uid==""||token=="") return false;
+	openNav();
 
 }
 function deletePost() {
@@ -160,5 +161,12 @@ function deletePost() {
       	if(data.data=="error") return false;
 		node.innerHTML="";
 	});
+}
+function openNav() {
+    document.getElementById("myNav").style.height = "100%";
+}
+
+function closeNav() {
+    document.getElementById("myNav").style.height = "0%";
 }
 
