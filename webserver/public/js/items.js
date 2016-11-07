@@ -173,7 +173,8 @@ function markAsSold(){
       	for(var i in names){
       		var th1 = document.createElement('th');
       		var a = document.createElement('a');
-      		a.href='#su';
+      		// a.href='#su';
+      		a.onclick=su;
       		a.innerHTML=names[i]["name"];
       		a.id=names[i]["uid"];
       		th1.appendChild(a);
@@ -181,15 +182,14 @@ function markAsSold(){
       	}
       		var th1 = document.createElement('th');
       		var a = document.createElement('a');
-      		a.href='#su';
+      		// a.href='#su';
+      		a.onclick=su;
       		a.innerHTML="Others";
       		a.id="0";
       		th1.appendChild(a);
       		tmp_con.appendChild(th1);
-
-      		//critical declare listener after creation
-      		$('a[href="#su"]').click(function(){
-			    // console.log(this);
+      		
+      		function su(){
 
 			    if(selected_buyer==null){
 			    	selected_buyer=this;
@@ -199,13 +199,37 @@ function markAsSold(){
 			    	selected_buyer = this;
 			    	selected_buyer.style.color="#4da6ff";
 				}
-			});
+      		}
+      		//critical declare listener after creation
+   //    		$('a[href="#su"]').click(function(){
+			//     // console.log(this);
+
+			//     if(selected_buyer==null){
+			//     	selected_buyer=this;
+			//     	selected_buyer.style.color="#4da6ff";
+			// 	}else{
+			// 		selected_buyer.style.color="";
+			//     	selected_buyer = this;
+			//     	selected_buyer.style.color="#4da6ff";
+			// 	}
+			// });
       
       		selected_rate=null;
       		selected_buyer=null;
 			openNav();
 	});
 
+}
+
+function select_rate(element) {
+	if(selected_rate==null){
+    	selected_rate=this;
+    	selected_rate.style.color="#4da6ff";
+	}else{
+		selected_rate.style.color="";
+    	selected_rate = this;
+    	selected_rate.style.color="#4da6ff";
+	}
 }
 $('a[href="#r"]').click(function(){
     //console.log(this.style.color);
