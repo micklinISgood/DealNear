@@ -385,6 +385,27 @@ def deleteItem():
 
   return jsonify(data="ok")
 
+@app.route('/guessBuyer', methods=['GET'])
+def guessBuyer():
+
+  uid = request.args.get('uid', -1, type=int)
+  token = request.args.get('token', "", type=str)
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
+
+  cursor = g.conn.execute("select users.uid,users.name from users,(select max(msg.time),from_id from msg where to_id=%s group by from_id) as b where users.uid=b.from_id",uid)
+  ret =[]
+  for result in cursor:
+    data ={}
+    data["uid"]=result["uid"]
+    data["name"]=result["name"]
+    ret.append(data)  
+  cursor.close()
+
+  return jsonify(data=ret)
+
+
 @app.route('/updatePrice', methods=['GET'])
 def updatePrice():
 

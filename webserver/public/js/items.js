@@ -1,5 +1,5 @@
 
-var items_data, selected_rate=null;
+var items_data, selected_rate=null,selected_buyer=null,selected_pid=null;
 function viewItems(){
 	showItems();
 
@@ -145,11 +145,55 @@ function markAsSold(){
 	uid= getCookie("uid");
 	token= getCookie("token");
 	if(uid==""||token=="") return false;
-	openNav();
+	
+	selected_pid = this.id;
+	tmp_con = document.getElementById('mainguess');
+	$.getJSON('http://'+ window.location.host + '/guessBuyer', {
+        uid: uid,
+        token: token
+      }, function(data) {
+      	if(data.data=="error") return false;
+      	tmp_con.innerHTML = "";
+
+      	names = data.data;
+      	for(var i in names){
+      		var th1 = document.createElement('th');
+      		var a = document.createElement('a');
+      		a.href='#su';
+      		a.innerHTML=names[i]["name"];
+      		a.id=names[i]["uid"];
+      		th1.appendChild(a);
+      		tmp_con.appendChild(th1);
+      	}
+      		var th1 = document.createElement('th');
+      		var a = document.createElement('a');
+      		a.href='#su';
+      		a.innerHTML="Others";
+      		a.id="0";
+      		th1.appendChild(a);
+      		tmp_con.appendChild(th1);
+
+      		//critical declare listener after creation
+      		$('a[href="#su"]').click(function(){
+			    console.log(this);
+
+			    if(selected_buyer==null){
+			    	selected_buyer=this;
+			    	selected_buyer.style.color="#4da6ff";
+				}else{
+					selected_buyer.style.color="";
+			    	selected_buyer = this;
+			    	selected_buyer.style.color="#4da6ff";
+				}
+			});
+      
+
+			openNav();
+	});
 
 }
 $('a[href="#r"]').click(function(){
-    console.log(this.style.color);
+    //console.log(this.style.color);
 
     if(selected_rate==null){
     	selected_rate=this;
@@ -159,6 +203,17 @@ $('a[href="#r"]').click(function(){
     	selected_rate = this;
     	selected_rate.style.color="#4da6ff";
 	}
+});
+
+
+
+$('a[href="#marksold"]').click(function(){
+    
+	console.log(selected_rate.id+","+selected_pid+","+selected_buyer.id);
+	closeNav();
+    if(selected_rate==null || selected_buyer==null || selected_pid == null ) return false;
+    console.log(this);
+  
 });
 
 function deletePost() {
