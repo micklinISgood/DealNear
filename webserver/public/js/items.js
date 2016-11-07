@@ -221,13 +221,9 @@ $('a[href="#r"]').click(function(){
 });
 
 
-
-$('a[href="#marksold"]').click(function(){
-
-    
-	//console.log(selected_rate.id+","+selected_pid+","+selected_buyer.id);
-
-    if(selected_rate==null || selected_buyer==null || selected_pid == null ) return false;
+function marksold () {
+	// console.log(selected_rate.id+","+selected_pid+","+selected_buyer.id);
+	if(selected_rate==null || selected_buyer==null || selected_pid == null ) return false;
 
     uid= getCookie("uid");
 	token= getCookie("token");
@@ -246,8 +242,33 @@ $('a[href="#marksold"]').click(function(){
       	closeNav();
       	if(data.data=="error") return false;
 	});
+}
+// $('a[href="#marksold"]').click(function(){
+
+    
+// 	//console.log(selected_rate.id+","+selected_pid+","+selected_buyer.id);
+
+//     if(selected_rate==null || selected_buyer==null || selected_pid == null ) return false;
+
+//     uid= getCookie("uid");
+// 	token= getCookie("token");
+
+// 	if(uid==""||token=="") return false;
+
+//     $.getJSON('http://'+ window.location.host + '/markAsSold', {
+//         from_id: uid,
+//         token: token,
+//         pid:selected_pid.id,
+//         to_id:selected_buyer.id,
+//         rate:selected_rate.id
+//       }, function(data) {
+//       	selected_pid.parentNode.parentNode.parentNode.parentNode.innerHTML="";
+//       	selected_pid=null;
+//       	closeNav();
+//       	if(data.data=="error") return false;
+// 	});
   
-});
+// });
 
 function deletePost() {
 	uid= getCookie("uid");
