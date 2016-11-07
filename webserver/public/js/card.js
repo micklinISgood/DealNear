@@ -12,7 +12,7 @@ if(getCookie("lat")=="" ||getCookie("lng")==""){
 
 if( getCookie("uid")!="" && getCookie("token")!="" && getCookie("name")!=""){
 
-
+	uplodlocation();
 	login =document.getElementById('login');
 	login.innerHTML=getCookie("name").replace(/\"/g,"");
 	drop =document.getElementById('drop2');
@@ -84,6 +84,10 @@ var searchBox = new google.maps.places.SearchBox(input);
     }
     backMarket(); 
     loadPost(place.geometry.location.lat(),place.geometry.location.lng())
+    setCookie("lat", place.geometry.location.lat().toFixed(5), 360);
+    setCookie("lng", place.geometry.location.lng().toFixed(5), 360);
+    setCookie("loc_name", place.name, 360);
+    uplodlocation();
    
   });
 
@@ -226,6 +230,27 @@ function fireChatroom(){
 	console.log(getCookie("uid"));
 
 }
+function uplodlocation () {
+	updata={}
+	updata["uid"]= getCookie("uid");
+	updata["token"]= getCookie("token");
+	updata["lat"]= getCookie("lat");
+	updata["lng"]= getCookie("lng");
+	updata["loc_name"]= getCookie("loc_name");
+
+	if(updata["uid"]==""||updata["token"]==""|| updata["lat"]==""||updata["lng"]==""||updata["loc_name"]=="") return false;
+
+	$.post('http://'+ window.location.host + '/uploadUserloc', updata
+			, function(data) {
+				
+				return false;
+
+				
+			},'json');
+
+	
+}
+
 function loadMsg(_uid,_token) {
 
 var inbox = document.getElementById('inbox_msg');

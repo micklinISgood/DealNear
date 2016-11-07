@@ -338,6 +338,27 @@ def updateUser():
 
   return jsonify(data="ok")
 
+@app.route('/uploadUserloc', methods=['POST'])
+def uploadUserloc():
+
+  uid = request.form['uid']
+  token = request.form['token']
+  lat = request.form['lat']
+  lng = request.form['lng']
+  loc_name = request.form['loc_name']
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
+  try:
+    g.conn.execute("Insert into locations (name, latitude, longitude) values (%s,%s,%s)",loc_name,lat,lng)
+
+    cursor = g.conn.execute("select lid from locations where latitude=%s and longitude=%s",lat, lng)
+    lid = cursor.fetchone()[0]
+    
+    g.conn.execute("Insert into set_uloc (uid, lid, time) values (%s,%s,%s)",uid,lid,int(time.time()))
+  except Exception as e:
+    print e
+  return jsonify(data="ok")
 
 @app.route('/deleteSession', methods=['POST'])
 def deleteSession():
@@ -469,7 +490,7 @@ def guessBuyer():
   row = cursor.fetchone()
   if row is None: return jsonify(data="error")
 
-  cursor = g.conn.execute("select users.uid,users.name from users,(select max(msg.time),from_id from msg where to_id=%s group by from_id) as b where users.uid=b.from_id",uid)
+  cursor = g.conn.execute("select users.uid,users.name from users,(select max(msg.time),from_id from msg where to_id=%s group by from_id) as b where users.uid=b.from_id and users.uid<>0",uid)
   ret =[]
   for result in cursor:
     data ={}

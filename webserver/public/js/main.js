@@ -9,7 +9,7 @@ function initMap() {
     center: {lat: 40.8075355, lng: -73.9625727},
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
-  if(getCookie("lat")==""){
+  if(getCookie("lat")=="" || getCookie("lng")=="" ){
     pos = map.getCenter()
     plot(pos.lat(),pos.lng());
   }else{
@@ -66,6 +66,12 @@ function initMap() {
     }
     infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
     infowindow.open(map, geo_marker);
+    setCookie("lat", place.geometry.location.lat().toFixed(5), 360);
+    setCookie("lng", place.geometry.location.lng().toFixed(5), 360);
+    setCookie("loc_name", place.name, 360);
+
+    window.location.href = 'http://'+ window.location.host + '/market.html';
+
   });
 
 }
@@ -91,17 +97,19 @@ $.getJSON('http://'+ window.location.host + '/near_count', {
                 new google.maps.Point(0, content.length));
           var marker = new google.maps.Marker({
             position: myLatLng,
-            labelContent: _data[i]["name"]+","+_data[i]["count"],
+            labelContent: _data[i]["name"],
             map: map,
             icon:markerImage,
             animation: google.maps.Animation.DROP
           });
-          //console.log(marker.getPosition().lat()+","+marker.getPosition().lng());
+          //console.log(marker.getPosition().lat()+","+marker.getPosition().lng()+","+marker.labelContent);
           google.maps.event.addListener(marker, 'click', (function (marker) {
           return function () {
           //redirect
               setCookie("lat", marker.getPosition().lat(), 360);
               setCookie("lng", marker.getPosition().lng(), 360);
+              setCookie("loc_name", marker.labelContent, 360);
+
               window.location.href = 'http://'+ window.location.host + '/market.html';
 
             }
