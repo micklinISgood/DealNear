@@ -1,6 +1,6 @@
 var u_data;
 function viewUserinfo(){
-	showUser ();
+	showUser();
 	getUser();
 }
 

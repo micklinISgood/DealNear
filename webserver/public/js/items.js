@@ -124,13 +124,30 @@ function viewItems(){
 
 }
 function updatePrice () {
-	console.log(items_data[this.id]);
-	console.log($("#price"+items_data[this.id]["pid"]));
+	if($("#price"+items_data[this.id]["pid"]).val()==items_data[this.id]["price"])return false;
+	uid= getCookie("uid");
+	token= getCookie("token");
+	if(uid==""||token=="") return false;
+
 }
 function markAsSold(){
-	console.log(this.id);
+	uid= getCookie("uid");
+	token= getCookie("token");
+	if(uid==""||token=="") return false;
+
 }
 function deletePost() {
-	console.log(this.id);
+	uid= getCookie("uid");
+	token= getCookie("token");
+	if(uid==""||token=="") return false;
+	node = this.parentNode;
+	$.getJSON('http://'+ window.location.host + '/deleteItem', {
+        uid: uid,
+        token: token,
+        pid:this.id
+      }, function(data) {
+      	if(data.data=="error") return false;
+		node.innerHTML="";
+	});
 }
 

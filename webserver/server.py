@@ -370,6 +370,20 @@ def inbox():
 
   return jsonify(data=ret)
 
+@app.route('/deleteItem', methods=['GET'])
+def deleteItem():
+
+  uid = request.args.get('uid', -1, type=int)
+  pid = request.args.get('pid', -1, type=int)
+  token = request.args.get('token', "", type=str)
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
+
+  g.conn.execute("Update post set status=2 where pid=%s",pid)
+
+
+  return jsonify(data="ok")
 
 @app.route('/userItems', methods=['GET'])
 def userItems():
