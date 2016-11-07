@@ -195,6 +195,7 @@ function clickPhoto(element) {
   console.log(ids);
   var captionText = document.getElementById("caption");
   captionText.innerHTML = this.alt;
+
 }
 function sendMsg(element) {
 
@@ -250,6 +251,13 @@ function uplodlocation () {
 
 	
 }
+
+function closeComment() {
+	$("#modal01").hide();
+}
+$('a[href="#closeComment"]').click(function(){
+	$("#modal01").hide();
+});
 
 function loadMsg(_uid,_token) {
 

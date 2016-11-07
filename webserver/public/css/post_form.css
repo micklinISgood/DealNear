@@ -52,6 +52,12 @@
     right: 45px;
     font-size: 60px;
 }
+.w3-modal .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 60px;
+}
 
 @media screen and (max-height: 450px) {
   .overlay {overflow-y: auto;}
