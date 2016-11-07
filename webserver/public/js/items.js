@@ -1,5 +1,5 @@
 
-var items_data;
+var items_data, selected_rate=null;
 function viewItems(){
 	showItems();
 
@@ -148,6 +148,19 @@ function markAsSold(){
 	openNav();
 
 }
+$('a[href="#r"]').click(function(){
+    console.log(this.style.color);
+
+    if(selected_rate==null){
+    	selected_rate=this;
+    	selected_rate.style.color="#4da6ff";
+	}else{
+		selected_rate.style.color="";
+    	selected_rate = this;
+    	selected_rate.style.color="#4da6ff";
+	}
+});
+
 function deletePost() {
 	uid= getCookie("uid");
 	token= getCookie("token");

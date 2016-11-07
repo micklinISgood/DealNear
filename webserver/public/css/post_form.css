@@ -33,7 +33,7 @@
     margin-top: 30px;
 }
 
-.overlay a {
+.overlay a ,table[id="main"]{
     padding: 8px;
     text-decoration: none;
     font-size: 36px;
