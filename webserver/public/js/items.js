@@ -250,6 +250,7 @@ function deletePost() {
 	token= getCookie("token");
 	if(uid==""||token=="") return false;
 	node = this.parentNode;
+	if(confirm('Are you sure to delete this post?')){
 	$.getJSON('http://'+ window.location.host + '/deleteItem', {
         uid: uid,
         token: token,
@@ -258,6 +259,7 @@ function deletePost() {
       	if(data.data=="error") return false;
 		node.innerHTML="";
 	});
+	}
 }
 function openNav() {
     document.getElementById("myNav").style.height = "100%";
