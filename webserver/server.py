@@ -148,9 +148,12 @@ def getPostById(result, data):
     u_row = u_cursor.fetchone()
     data["p_name"] =  u_row["name"] 
     data["p_uid"] = int(u_row["uid"])
-    r_cursor = g.conn.execute("select avg(point) from rate where to_id= %s ", u_row["uid"])
+    r_cursor = g.conn.execute(" select avg(p) from (select avg(point) as p, from_id from rate where to_id=%s and \
+      from_id in (select to_id from sell where from_id=%s) group by from_id) as foo ", u_row["uid"],u_row["uid"])
     tmp_r =  r_cursor.fetchone()["avg"]
+    print tmp_r
     if tmp_r is not None : tmp_r= float(tmp_r)
+    print tmp_r
     data["rate"] = tmp_r
 
 
