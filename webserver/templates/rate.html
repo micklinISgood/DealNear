@@ -1,0 +1,74 @@
+<link rel="stylesheet" href="/css/post_form.css">
+<div id="myNav" class="overlay">
+<!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
+<div class="overlay-content">
+<iframe frameborder="0" width="40%" height="30%" id="postview" src="http://0.0.0.0:8111/login.html"></iframe>
+<div height="50%">
+<a id="insert_name"> Give a rate to </a>
+<div>
+<center><table>
+<tr>
+<th><a href="#r" id="1">1</a></th>
+<th><a href="#r" id="2">2</a></th>
+<th><a href="#r" id="3">3</a></th>
+<th><a href="#r" id="4">4</a></th>
+<th><a href="#r" id="5">5</a></th>
+</tr>
+</table></center><div>
+<a href="#marksold" name="sold">Submit</a>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+<script type="text/javascript" src="/js/util.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script>
+var selected_rate=null;
+var data = {{ key|tojson }};
+console.log(data);
+document.getElementById("myNav").style.height = "100%";
+uid= getCookie("uid");
+token= getCookie("token");
+if(uid!=data["buyer_id"]){
+	redirect();
+}
+document.getElementById("postview").src='http://'+ window.location.host+'/p/'+data["pid"];
+document.getElementById("insert_name").innerHTML += data["seller_name"]+" please"
+$('a[href="#r"]').click(function(){
+    //console.log(this.style.color);
+
+    if(selected_rate==null){
+    	selected_rate=this;
+    	selected_rate.style.color="#4da6ff";
+	}else{
+		selected_rate.style.color="";
+    	selected_rate = this;
+    	selected_rate.style.color="#4da6ff";
+	}
+});
+$('a[href="#marksold"]').click(function(){
+
+    
+	// console.log(selected_rate.id+","+data["seller_id"]);
+
+    if(selected_rate==null) redirect();
+	if(uid==""||token=="") redirect();
+
+    $.getJSON('http://'+ window.location.host + '/rateSeller', {
+        from_id: uid,
+        token: token,
+        to_id:data["seller_id"],
+        rate:selected_rate.id
+      }, function(data) {
+      	 redirect();
+	});
+  
+});
+function redirect() {
+	window.location.href = 'http://'+ window.location.host+'/market.html'; 
+}
+</script>

@@ -152,9 +152,9 @@ def getPostById(result, data):
       r_cursor = g.conn.execute(" select avg(p) from (select avg(point) as p, from_id from rate where to_id=%s and \
         from_id in (select to_id from sell where from_id=%s) group by from_id) as foo ", u_row["uid"],u_row["uid"])
       tmp_r =  r_cursor.fetchone()["avg"]
-      print tmp_r
+      # print tmp_r
       if tmp_r is not None : tmp_r= float(tmp_r)
-      print tmp_r
+      # print tmp_r
       data["rate"] = tmp_r
     except:
       pass
@@ -176,7 +176,7 @@ def index():
   print request.args
   print request.user_agent.browser
   print int(time.time())
-
+  print 'Hello, world! running on %s' % request.host
   url = 'http://freegeoip.net/json/'+request.remote_addr
   r = requests.get(url)
   print r.json()
@@ -246,13 +246,39 @@ def add():
   g.conn.execute(text(cmd), name1 = name, name2 = name);
   return redirect('/')
 
+@app.route('/r/<path:path>')
+def rate_seller(path):
+  # print path
+  x=re.split('[\/]',path)
+  data={}
+  try:
+    pid = int(x[0])
+    from_id = int(x[1])
+    to_id = int(x[2])
+    cursor = g.conn.execute("select * from sell where pid = %s and from_id=%s and to_id=%s",pid,from_id,to_id)
+    row = cursor.fetchone()
+    if row is not None: 
+      cursor = g.conn.execute("select * from users where uid = %s ",from_id)
+      u_d = cursor.fetchone()
+      data["seller_id"]=u_d["uid"]
+      data["seller_name"]=u_d["name"]
+      data["buyer_id"]=to_id
+      data["pid"]=pid
+      return render_template("rate.html", key=data)
+  except:
+    pass
+
+  return render_template("rate.html", key=data)
 
 @app.route('/p/<path:path>')
 def postlink(path):
-  print path
+  # print path
   data={}
-  cursor = g.conn.execute("select * from post where pid = %s",path)
-  getPostById(cursor.fetchone(),data)
+  try:
+    cursor = g.conn.execute("select * from post where pid = %s",path)
+    getPostById(cursor.fetchone(),data)
+  except:
+    pass
   return render_template("post.html", key=data)
 
 @app.route('/sendMsg', methods=['GET'])
@@ -281,12 +307,25 @@ def logout():
  
   return jsonify(data="ok")
 
+@app.route('/rateSeller', methods=['GET'])
+def rateSeller():
+  uid = request.args.get('from_id', -1, type=int)
+  to_id = request.args.get('to_id', -1, type=int)
+  rate = request.args.get('rate', -1, type=int)
+  token = request.args.get('token', "", type=str)
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
+
+  g.conn.execute("INSERT INTO rate (time, from_id, to_id, point) VALUES (%s, %s, %s, %s);",int(time.time()) ,uid, to_id,rate)
+  
+  return jsonify(data="ok")
+
 @app.route('/updateUser', methods=['POST'])
 def updateUser():
 
   uid = request.form['uid']
   token = request.form['token']
-  print request.form
   cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
   row = cursor.fetchone()
   if row is None: return jsonify(data="error")
@@ -413,8 +452,9 @@ def markAsSold():
   if to_id != 0:
     cursor = g.conn.execute("Select name from users where uid=%s",from_id)
     row = cursor.fetchone()[0]
-    # msg = "Vote Seller"+row +"please "+url
-    # g.conn.execute("INSERT into msg values (%s,%s,%s,%s)",s_time,0,to_id,msg)
+    url = "http://%s/r/%d/%d/%d"%(request.host,pid,from_id,to_id)
+    msg = "Give a rate to "+row +" please \n"+url
+    g.conn.execute("INSERT into msg values (%s,%s,%s,%s)",s_time,0,to_id,msg)
 
 
   return jsonify(data="ok")
