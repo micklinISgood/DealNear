@@ -385,6 +385,27 @@ def deleteItem():
 
   return jsonify(data="ok")
 
+@app.route('/updatePrice', methods=['GET'])
+def updatePrice():
+
+  uid = request.args.get('uid', -1, type=int)
+  pid = request.args.get('pid', -1, type=int)
+  price = request.args.get('price', -1, type=float)
+  token = request.args.get('token', "", type=str)
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
+
+  cursor = g.conn.execute("select * from price where amount=%s",price)
+  row = cursor.fetchone()
+  if row ==None:
+      try:
+        g.conn.execute("Insert into price (amount) values (%s)",price)
+      except:
+        pass
+  g.conn.execute("Insert into set_price (time, pid, amount) values (%s,%s,%s)",int(time.time()),pid,price)
+  return jsonify(data="ok")
+
 @app.route('/userItems', methods=['GET'])
 def userItems():
 
