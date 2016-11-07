@@ -27,15 +27,17 @@ function viewItems(){
 			var innerDiv = document.createElement('div');
 			innerDiv.className = 'w3-card-12 w3-white';
 			innerDiv.style="width:95%;padding:2%";
-			var btn = document.createElement('button');
-      		btn.className= "btn btn-xs w3-gray pull-right";
-  			btn.onclick=deletePost;
-  			btn.id =_data[i]["pid"];
-  			sp = document.createElement('span');
-  			sp.className = "glyphicon  glyphicon-remove";
-  			sp.innerHTML= "Delete";
-  			btn.appendChild(sp);
-  			innerDiv.appendChild(btn);
+			if(_data[i]["status"]==0){
+				var btn = document.createElement('button');
+	      		btn.className= "btn btn-xs w3-gray pull-right";
+	  			btn.onclick=deletePost;
+	  			btn.id =_data[i]["pid"];
+	  			sp = document.createElement('span');
+	  			sp.className = "glyphicon  glyphicon-remove";
+	  			sp.innerHTML= "Delete";
+	  			btn.appendChild(sp);
+	  			innerDiv.appendChild(btn);
+  			}
 
 			for ( var j in _data[i]["pics"]){
 				var img = document.createElement('img');
@@ -100,6 +102,13 @@ function viewItems(){
 				btn.onclick = markAsSold;
 				btn.innerHTML = "Mark as Sold";
 				td5.appendChild(btn);
+			}else if(_data[i]["status"]==1){
+				var td5 = document.createElement('td');
+				td5.align="right";
+				var btn = document.createElement('button');
+				btn.className = "w3-btn w3-black";
+				btn.innerHTML = "Sold";
+				td5.appendChild(btn);
 			}
 			tr6.appendChild(td5);
 			
@@ -146,7 +155,7 @@ function markAsSold(){
 	token= getCookie("token");
 	if(uid==""||token=="") return false;
 	
-	selected_pid = this.id;
+	selected_pid = this;
 	tmp_con = document.getElementById('mainguess');
 	$.getJSON('http://'+ window.location.host + '/guessBuyer', {
         uid: uid,
@@ -175,7 +184,7 @@ function markAsSold(){
 
       		//critical declare listener after creation
       		$('a[href="#su"]').click(function(){
-			    console.log(this);
+			    // console.log(this);
 
 			    if(selected_buyer==null){
 			    	selected_buyer=this;
@@ -187,7 +196,8 @@ function markAsSold(){
 				}
 			});
       
-
+      		selected_rate=null;
+      		selected_buyer=null;
 			openNav();
 	});
 
@@ -208,11 +218,30 @@ $('a[href="#r"]').click(function(){
 
 
 $('a[href="#marksold"]').click(function(){
+
     
-	console.log(selected_rate.id+","+selected_pid+","+selected_buyer.id);
-	closeNav();
+	//console.log(selected_rate.id+","+selected_pid+","+selected_buyer.id);
+
     if(selected_rate==null || selected_buyer==null || selected_pid == null ) return false;
-    console.log(this);
+
+    uid= getCookie("uid");
+	token= getCookie("token");
+
+	if(uid==""||token=="") return false;
+
+    $.getJSON('http://'+ window.location.host + '/markAsSold', {
+        from_id: uid,
+        token: token,
+        pid:selected_pid.id,
+        to_id:selected_buyer.id,
+        rate:selected_rate.id
+      }, function(data) {
+      	selected_pid.className="w3-btn w3-black";
+      	selected_pid.innerHTML="Sold";
+      	selected_pid=null;
+      	closeNav();
+      	if(data.data=="error") return false;
+	});
   
 });
 

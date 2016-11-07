@@ -385,6 +385,35 @@ def deleteItem():
 
   return jsonify(data="ok")
 
+@app.route('/markAsSold', methods=['GET'])
+def markAsSold():
+
+  from_id = request.args.get('from_id', -1, type=int)
+  to_id = request.args.get('to_id', -1, type=int)
+  rate = request.args.get('rate', -1, type=int)
+  pid = request.args.get('pid', -1, type=int)
+  token = request.args.get('token', "", type=str)
+  name = request.args.get('name', "", type=str)
+
+  cursor = g.conn.execute("Select * from session where uid=%s and location=%s",from_id,token)
+  row = cursor.fetchone()
+  if row is None: return jsonify(data="error")
+
+  s_time = int(time.time())
+
+  g.conn.execute("INSERT INTO sell (pid, time, from_id, to_id) VALUES (%s, %s, %s, %s);", pid, s_time ,from_id, to_id)
+  g.conn.execute("Update post set status=1 where pid=%s",pid)
+  g.conn.execute("INSERT INTO rate (time, from_id, to_id, point) VALUES (%s, %s, %s, %s);",s_time ,from_id, to_id,rate)
+  if to_id != 0:
+    cursor = g.conn.execute("Select name from users where uid=%s",uid)
+    row = cursor.fetchone()[0]
+    # msg = "Vote Seller"+row +"please "+url
+    # g.conn.execute("INSERT into msg values (%s,%s,%s,%s)",s_time,0,to_id,msg)
+
+
+  return jsonify(data="ok")
+
+
 @app.route('/guessBuyer', methods=['GET'])
 def guessBuyer():
 
