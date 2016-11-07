@@ -71,13 +71,17 @@ function viewItems(){
 			tr3.appendChild(td3);
 			var td4 = document.createElement('td');
 			td4.align="right";
-			var price = document.createElement('input');
-			price.type="number"
-			price.min="0"
-			price.step="1"
-			price.id ="price"+_data[i]["pid"];
-			price.value = _data[i]["price"];
-			td4.appendChild(price);
+			if(_data[i]["status"]==0){
+				var price = document.createElement('input');
+				price.type="number"
+				price.min="0"
+				price.step="1"
+				price.id ="price"+_data[i]["pid"];
+				price.value = _data[i]["price"];
+				td4.appendChild(price);
+			}else if(_data[i]["status"]==1){
+				td3.innerHTML += _data[i]["price"];
+			}
 			tr3.appendChild(td4);
 		
 
@@ -86,14 +90,15 @@ function viewItems(){
 			var tr6 = document.createElement('tr');
 			var td4 = document.createElement('td');
 			td4.align="left";
-			var btn = document.createElement('button');
-			btn.className = "w3-btn w3-indigo";
-			btn.id = i;
-			btn.onclick = updatePrice;
-			btn.innerHTML = "Update";
-			td4.appendChild(btn);
-			tr6.appendChild(td4);
 			if(_data[i]["status"]==0){
+				var btn = document.createElement('button');
+				btn.className = "w3-btn w3-indigo";
+				btn.id = i;
+				btn.onclick = updatePrice;
+				btn.innerHTML = "Update";
+				td4.appendChild(btn);
+				tr6.appendChild(td4);
+			
 				var td5 = document.createElement('td');
 				td5.align="right";
 				var btn = document.createElement('button');
@@ -236,8 +241,7 @@ $('a[href="#marksold"]').click(function(){
         to_id:selected_buyer.id,
         rate:selected_rate.id
       }, function(data) {
-      	selected_pid.className="w3-btn w3-black";
-      	selected_pid.innerHTML="Sold";
+      	selected_pid.parentNode.parentNode.parentNode.parentNode.innerHTML="";
       	selected_pid=null;
       	closeNav();
       	if(data.data=="error") return false;

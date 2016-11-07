@@ -408,7 +408,7 @@ def markAsSold():
   g.conn.execute("Update post set status=1 where pid=%s",pid)
   g.conn.execute("INSERT INTO rate (time, from_id, to_id, point) VALUES (%s, %s, %s, %s);",s_time ,from_id, to_id,rate)
   if to_id != 0:
-    cursor = g.conn.execute("Select name from users where uid=%s",uid)
+    cursor = g.conn.execute("Select name from users where uid=%s",from_id)
     row = cursor.fetchone()[0]
     # msg = "Vote Seller"+row +"please "+url
     # g.conn.execute("INSERT into msg values (%s,%s,%s,%s)",s_time,0,to_id,msg)
