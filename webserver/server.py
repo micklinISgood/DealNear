@@ -124,37 +124,40 @@ def teardown_request(exception):
 #
 
 def getPostById(result, data):
-    data["pid"]=result["pid"]
-    data["title"]=result["title"]
-    data["cr_time"]=result["cr_time"]
-    data["status"]=result["status"]
-    l_cursor = g.conn.execute("Select name from locations where lid in (Select lid from set_ploc where pid = %s)", result["pid"])
-    loc_str = ""
-    for locs in l_cursor:
-          loc_str += locs["name"]+"; "
-    l_cursor.close()
-    if len(loc_str) >0 : data["locs"] = loc_str
-    l_cursor = g.conn.execute("Select url from  pictures where pid = %s", result["pid"])
-    loc_str = ""
-    data["pics"]=[]
-    for locs in l_cursor:
-          data["pics"].append(locs["url"])
-    l_cursor.close()
-    p_cursor = g.conn.execute("Select amount from set_price where pid = %s order by time desc limit 1", result["pid"])
-    data["price"] = float(p_cursor.fetchone()[0])
-    w_cursor = g.conn.execute("Select count(*) from (Select uid,pid from watch group by uid,pid having pid =%s) as foo", result["pid"])
-    data["watch"] = int(w_cursor.fetchone()[0])
-    u_cursor = g.conn.execute("select users.name, users.uid from create_post, users where pid = %s and users.uid=create_post.uid", result["pid"])
-    u_row = u_cursor.fetchone()
-    data["p_name"] =  u_row["name"] 
-    data["p_uid"] = int(u_row["uid"])
-    r_cursor = g.conn.execute(" select avg(p) from (select avg(point) as p, from_id from rate where to_id=%s and \
-      from_id in (select to_id from sell where from_id=%s) group by from_id) as foo ", u_row["uid"],u_row["uid"])
-    tmp_r =  r_cursor.fetchone()["avg"]
-    print tmp_r
-    if tmp_r is not None : tmp_r= float(tmp_r)
-    print tmp_r
-    data["rate"] = tmp_r
+    try:
+      data["pid"]=result["pid"]
+      data["title"]=result["title"]
+      data["cr_time"]=result["cr_time"]
+      data["status"]=result["status"]
+      l_cursor = g.conn.execute("Select name from locations where lid in (Select lid from set_ploc where pid = %s)", result["pid"])
+      loc_str = ""
+      for locs in l_cursor:
+            loc_str += locs["name"]+"; "
+      l_cursor.close()
+      if len(loc_str) >0 : data["locs"] = loc_str
+      l_cursor = g.conn.execute("Select url from  pictures where pid = %s", result["pid"])
+      loc_str = ""
+      data["pics"]=[]
+      for locs in l_cursor:
+            data["pics"].append(locs["url"])
+      l_cursor.close()
+      p_cursor = g.conn.execute("Select amount from set_price where pid = %s order by time desc limit 1", result["pid"])
+      data["price"] = float(p_cursor.fetchone()[0])
+      w_cursor = g.conn.execute("Select count(*) from (Select uid,pid from watch group by uid,pid having pid =%s) as foo", result["pid"])
+      data["watch"] = int(w_cursor.fetchone()[0])
+      u_cursor = g.conn.execute("select users.name, users.uid from create_post, users where pid = %s and users.uid=create_post.uid", result["pid"])
+      u_row = u_cursor.fetchone()
+      data["p_name"] =  u_row["name"] 
+      data["p_uid"] = int(u_row["uid"])
+      r_cursor = g.conn.execute(" select avg(p) from (select avg(point) as p, from_id from rate where to_id=%s and \
+        from_id in (select to_id from sell where from_id=%s) group by from_id) as foo ", u_row["uid"],u_row["uid"])
+      tmp_r =  r_cursor.fetchone()["avg"]
+      print tmp_r
+      if tmp_r is not None : tmp_r= float(tmp_r)
+      print tmp_r
+      data["rate"] = tmp_r
+    except:
+      pass
 
 
 @app.route('/')
