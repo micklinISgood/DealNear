@@ -2,7 +2,7 @@ function clickPhoto() {
   document.getElementById("img01").src =this.src;
   document.getElementById("modal01").style.display = "block";
 
-  console.log(this.id);
+  // console.log(this.id);
 
   var c = document.getElementById('comments');
   var btn = document.getElementById('commentbtn');
@@ -30,12 +30,6 @@ function closeComment() {
 	$("#modal01").hide();
 }
 function submitComment(){
-
-	var c = document.getElementById('cmts');
-	var cmts = document.getElementById('comments');
-
-	if(c.value.length==0 || this.value =="") return false;
-
 	uid = getCookie("uid");
 	token = getCookie("token");
 
@@ -43,6 +37,13 @@ function submitComment(){
 		$('#drop2').show();
 		$("#modal01").hide();
 	}
+
+	var c = document.getElementById('cmts');
+	var cmts = document.getElementById('comments');
+
+	if(c.value.length==0 || this.value =="") return false;
+
+	
 	$.post('http://'+ window.location.host + '/putComment', {
 	    pid: this.value,
 	    uid: uid,
