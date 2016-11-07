@@ -63,9 +63,7 @@ if( getCookie("uid")!="" && getCookie("token")!="" && getCookie("name")!=""){
 
 
 }
-$('a[href="#1"]').click(function(){
-    showMain();
-});
+
 
 function requireLogin () {
 	$('#drop2').show();
@@ -126,6 +124,7 @@ function loadPost(_lat,_lng) {
 				img.className ='w3-border w3-image'
 				img.src = _data[i]["pics"][j];
 				img.onclick = clickPhoto;
+				img.id =_data[i]["pid"];
 				innerDiv.appendChild(img);
 			}
 			var t = document.createElement('table');
@@ -188,15 +187,15 @@ function loadPost(_lat,_lng) {
      });
 
 }
-function clickPhoto(element) {
-  document.getElementById("img01").src =this.src;
-  document.getElementById("modal01").style.display = "block";
-  ids = this.id.split(",");
-  console.log(ids);
-  var captionText = document.getElementById("caption");
-  captionText.innerHTML = this.alt;
+// function clickPhoto(element) {
+//   document.getElementById("img01").src =this.src;
+//   document.getElementById("modal01").style.display = "block";
+//   ids = this.id.split(",");
+//   console.log(this);
+//   var captionText = document.getElementById("caption");
+//   captionText.innerHTML = this.alt;
 
-}
+// }
 function sendMsg(element) {
 
 	if(getCookie("uid")=="" ||getCookie("token")==""){

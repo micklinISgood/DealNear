@@ -34,7 +34,7 @@
  <div class="bs-example">
     <nav id = "bar" class="navbar navbar-default" role="navigation">
 
-  <a class="navbar-brand" href="#1"> Deal Near</a>
+  <a class="navbar-brand" onclick=" showMain();"> Deal Near</a>
 
     <ul class="nav navbar-nav navbar-left">
       <li><a href="/">Map</a></li>
@@ -184,7 +184,7 @@
 
 <tr><th>Give a rate:</th>
 </tr>
-<tr><th>Give a rate:</th>
+<tr>
 </tr>
 <tr><th>Give a rate:</th>
 </tr>
@@ -196,8 +196,8 @@
 </tr>
 </table><div>
 <div class="field-wrap">
-  <input type="text"  name ="pw" required autocomplete="off" style="width: 85%;" placeholder="What's in your mind"/>
-  <span><button class="w3-btn w3-indigo">Comment</button></span></div>
+  <input type="text"  id="cmts" required autocomplete="off" style="width: 85%;" placeholder="What's in your mind"/>
+  <span><button class="w3-btn w3-indigo" id="commentbtn">Comment</button></span></div>
 </div>
 </div>
 
@@ -251,6 +251,7 @@
 <script type="text/javascript" src="/js/logout.js"></script>
 <script type="text/javascript" src="/js/user.js"></script>
 <script type="text/javascript" src="/js/items.js"></script>
+<script type="text/javascript" src="/js/comments.js"></script>
 <!-- <script src="js/locationpicker.jquery.js"></script> -->
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDXgIDmoWXLjZDLWUaUI6Xl_9987AaJO_U&libraries=places&callback=init">

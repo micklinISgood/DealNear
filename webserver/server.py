@@ -404,6 +404,48 @@ def getUser():
   
   return jsonify(data=ret)
 
+@app.route('/putComment', methods=['POST'])
+def putComment():
+  uid = request.form['uid']
+  token = request.form['token']
+  pid = request.form['pid']
+  text = request.form['text']
+  try:
+    cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
+    row = cursor.fetchone()
+    
+    if row is None: return jsonify(data="error")
+
+    g.conn.execute("INSERT INTO comment (pid, uid, text,time) VALUES (%s,%s,%s,%s)",pid,uid,text,int(time.time()))
+
+    return jsonify(data="ok")
+
+
+
+  except Exception as e:
+    print e
+    return jsonify(data="error")
+
+
+@app.route('/getComments', methods=['GET'])
+def getComments():
+  pid = request.args.get('pid', -1, type=int)
+
+  try:
+    cursor = g.conn.execute("Select comment.*, u.uid,u.name from comment, users as u where pid=%s and comment.uid=u.uid",pid)
+    ret=[]
+    for result in cursor:
+        data={}
+        data["uid"]=result["uid"]
+        data["name"]=result["name"]
+        data["text"]=result["text"]
+        ret.append(data)
+
+    return jsonify(data=ret)
+
+  except Exception as e:
+    print e
+    return jsonify(data="error")
 
 
 
