@@ -13,8 +13,11 @@ if(getCookie("lat")=="" ||getCookie("lng")==""){
 if( getCookie("uid")!="" && getCookie("token")!="" && getCookie("name")!=""){
 
 	uplodlocation();
-	login =document.getElementById('login');
-	login.innerHTML=getCookie("name").replace(/\"/g,"");
+	login =document.getElementById('login2');
+	login.text=getCookie("name").replace(/\"/g,"");
+	span=document.createElement("span");
+	span.className="caret";
+	login.appendChild(span);
 	drop =document.getElementById('drop2');
 	drop.innerHTML="";
 	var li = document.createElement("li");
@@ -54,7 +57,9 @@ if( getCookie("uid")!="" && getCookie("token")!="" && getCookie("name")!=""){
 	iframe.height="450px";
 	iframe.id="randomid";
 	iframe.setAttribute("src", link);
-	document.getElementById("drop2").appendChild(iframe);
+	li = document.createElement("li");
+	li.appendChild(iframe);
+	document.getElementById("drop2").appendChild(li);
 	iframe.onload = login;
 	$("#inbox").hide();
 	post =document.getElementById('post');
@@ -68,7 +73,7 @@ if( getCookie("uid")!="" && getCookie("token")!="" && getCookie("name")!=""){
 function requireLogin () {
 	$('#drop2').show();
 	
-	//document.getElementById('login').click();
+	//document.getElementById('drop2').click();
 	// $("#login").click();
 }
 
@@ -199,7 +204,8 @@ function loadPost(_lat,_lng) {
 function sendMsg(element) {
 
 	if(getCookie("uid")=="" ||getCookie("token")==""){
-		document.getElementById('drop2').click();
+		// login2 = document.getElementById('login2');
+		// login2.click();
 		// $('#login').addClass('open');
 		// // $('#login').click();
 		// // $('#login').dropdown('toggle');
@@ -208,7 +214,7 @@ function sendMsg(element) {
 
 		$('#drop2').show();
 
-		// console.log($('.dropdown-toggle')[1]);
+		//console.log(document.getElementById('login2'));
 		return false;
 	}
 
@@ -221,6 +227,9 @@ function sendMsg(element) {
         text: 'I am interested in this. \n'+'http://'+ window.location.host + '/p/'+ids[1]
       }, function(data) { 
       		// console.log(data);
+      		inbox = document.getElementById('inbox');
+      		inbox.click();
+
       });
 
 }
@@ -256,8 +265,7 @@ function uplodlocation () {
 
 function loadMsg(_uid,_token) {
 
-var inbox = document.getElementById('inbox_msg');
-inbox.innerHTML="";
+
 
 $.getJSON('http://'+ window.location.host + '/inbox', {
         uid: _uid,
@@ -266,7 +274,8 @@ $.getJSON('http://'+ window.location.host + '/inbox', {
       	 _data = data.data;
 
       	 if(_data=="error") return false;
-
+      	 var inbox = document.getElementById('inbox_msg');
+		 inbox.innerHTML="";
          for(var i in _data){
       
             var li = document.createElement('li');
