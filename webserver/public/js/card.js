@@ -273,7 +273,7 @@ $.getJSON('http://'+ window.location.host + '/inbox', {
             var a = document.createElement('a');
             a.innerHTML = _data[i]["name"]+", "+epoch2date(_data[i]["time"])+"<br>"+_data[i]["text"];;
             a.id= _data[i]["to_id"];
-            a.onclick=fireChatroom;
+            a.onclick=fireChat;
             li.appendChild(a);
             inbox.appendChild(li);
          	var li = document.createElement('li');
