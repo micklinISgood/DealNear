@@ -2,18 +2,23 @@
 <link rel="stylesheet" href="/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
 <link rel="stylesheet" href="/css/w3.css">
+<link rel="stylesheet" href="/css/post_form.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <style>body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif} .w3-third img{margin-bottom:-6px;opacity:0.8;cursor:pointer} .w3-third img:hover{opacity:1}</style>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <html>
 <body>
-<div id="content" style="width:100%" align= "center"></div>
-
+<div id="myNav" class="overlay">
+<a class="closebtn" onclick="closeItem();">&times;</a>
+	<div style="overflow-x:auto; height:100%;">
+		<div id="content" style="width:100%" align= "center"></div>
+	</div>
+</div>
 </body>
 
 <script>
-			
+			document.getElementById("myNav").style.height = "100%";
 			var _data = {{ key|tojson }};
 			//console.log(data);
 			var iDiv = document.createElement('div');
@@ -73,6 +78,8 @@
 			iDiv.appendChild(innerDiv);
 			document.getElementById('content').appendChild(iDiv);
 
-
+			function closeItem() {
+				window.location.href = 'http://'+ window.location.host+'/market.html'; 
+			}
 </script>
 </html>
