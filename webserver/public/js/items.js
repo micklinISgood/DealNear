@@ -263,6 +263,8 @@ function marksold () {
       }, function(data) {
       	selected_pid.parentNode.parentNode.parentNode.parentNode.innerHTML="";
       	selected_pid=null;
+      	selected_rate=null;
+      	selected_buyer=null;
       	closeNav();
       	if(data.data=="error") return false;
 	});

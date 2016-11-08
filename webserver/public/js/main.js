@@ -89,7 +89,7 @@ $.getJSON('http://'+ window.location.host + '/near_count', {
           cleanMarkers();
           _data = data.data;
           for(var i in _data){
-          var content = _data[i]["name"]+", Total posts:"+_data[i]["count"];
+          var content = _data[i]["name"]+", on sale:"+_data[i]["count"];
           var myLatLng = {lat: parseFloat(_data[i]["latitude"]), lng: parseFloat(_data[i]["longitude"])};
           var markerImage = new google.maps.MarkerImage("https://chart.googleapis.com/chart?chst=d_bubble_text_small&&chld=bb%7C"+content+"%7CC6EF8C%7C000000",
                 new google.maps.Size(content.length*10, content.length*2),
@@ -106,8 +106,8 @@ $.getJSON('http://'+ window.location.host + '/near_count', {
           google.maps.event.addListener(marker, 'click', (function (marker) {
           return function () {
           //redirect
-              setCookie("lat", marker.getPosition().lat(), 360);
-              setCookie("lng", marker.getPosition().lng(), 360);
+              setCookie("lat", marker.getPosition().lat().toFixed(5), 360);
+              setCookie("lng", marker.getPosition().lng().toFixed(5), 360);
               setCookie("loc_name", marker.labelContent, 360);
 
               window.location.href = 'http://'+ window.location.host + '/market.html';

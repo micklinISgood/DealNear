@@ -8,6 +8,15 @@ function openMap(){
 
 	    if(selector==null){
     		addMarker(map.getCenter(), map);
+            theForm = document.forms['item_form'];
+
+            latQuery= selector_btn.name+"[lat]";
+            lngQuery= selector_btn.name+"[lng]";
+            nQuery= selector_btn.name+"[name]";
+            theForm[nQuery].value=getCookie("loc_name");
+            theForm[latQuery].value=getCookie("lat");
+            theForm[lngQuery].value=getCookie("lng");
+
     	}else{
     		selector.setPosition(map.getCenter());
     	}
@@ -34,9 +43,9 @@ $(document).on('click', '.btn-add', function(e)
         newEntry.find('input')[1].name = "location["+id+"][lat]";
         newEntry.find('input')[2].name = "location["+id+"][lng]";
         
-        newEntry.find('input')[0].value='';
-        newEntry.find('input')[1].value='';
-        newEntry.find('input')[2].value='';
+        newEntry.find('input')[0].value=getCookie("loc_name");
+        newEntry.find('input')[1].value=getCookie("lat");
+        newEntry.find('input')[2].value=getCookie("lng");
         newEntry.find('input')[1].placeholder="click on selector";
         newEntry.find('input')[2].placeholder="click on selector";
 
@@ -106,7 +115,7 @@ function addnewpost() {
 
     	latQuery= selector_btn.name+"[lat]";
     	lngQuery= selector_btn.name+"[lng]";
-    	console.log(latQuery);
+    	//console.log(latQuery);
     	theForm[latQuery].value=event.latLng.lat().toFixed(5);
     	theForm[lngQuery].value=event.latLng.lng().toFixed(5);
     	}

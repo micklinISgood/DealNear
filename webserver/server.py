@@ -15,7 +15,7 @@ A debugger such as "pdb" may be helpful for debugging.
 Read about it online.
 """
 
-import os,time,requests,psycopg2,hashlib,re
+import os,time,requests,psycopg2,hashlib,re, random
 from sqlalchemy import *
 # from imagerq import *
 from sqlalchemy.pool import NullPool
@@ -747,8 +747,9 @@ def post_item():
           lids.append(row)
 
         cr_time = int(time.time())
-        g.conn.execute("Insert into post (title, cr_time, status) values (%s,%s,%s)",title,cr_time,0)
-        cursor = g.conn.execute("select pid from post where title=%s and cr_time=%s and status=0",title,cr_time)
+        cursor = g.conn.execute("Insert into post (title, cr_time, status) values (%s,%s,%s);\
+          select max(pid) from post where title=%s and cr_time=%s and status=0",title,cr_time,0,title,cr_time)
+        # cursor = g.conn.execute("select max(pid) from post where title=%s and cr_time=%s and status=0",title,cr_time)
         pid = cursor.fetchone()[0]
         for lid in lids:
           g.conn.execute("Insert into set_ploc (lid,pid) values (%s,%s)",lid,pid)
@@ -764,8 +765,20 @@ def post_item():
         g.conn.execute("Insert into set_price (time, pid, amount) values (%s,%s,%s)",cr_time,pid,price)
 
 
-        
+        cursor = g.conn.execute("select count(*),tag from piclib group by tag")
+        print cursor
         url="http://learnbonds.com/wp-content/uploads/Tesla-Model-S.jpg"
+        for row in cursor:
+          if row["tag"] in title:
+              offset = random.randint(0,row["count"])
+              try:
+                cursorU = g.conn.execute("select url from piclib where tag=%s limit 1 offset %s",row["tag"],offset)
+                url = cursorU.fetchone()[0]
+                break
+              except:
+                pass
+        
+        
         g.conn.execute("Insert into pictures (pid, url) values (%s,%s)",pid,url)
 
   
