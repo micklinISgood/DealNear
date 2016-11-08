@@ -17,6 +17,7 @@ Read about it online.
 
 import os,time,requests,psycopg2,hashlib,re
 from sqlalchemy import *
+# from imagerq import *
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, jsonify, redirect, Response
 
@@ -246,6 +247,24 @@ def add():
   g.conn.execute(text(cmd), name1 = name, name2 = name);
   return redirect('/')
 
+
+@app.route('/tag/<path:path>')
+def tag(path): 
+  
+
+  ret=get_photo_by_name(path)
+  cmd = 'INSERT INTO piclib VALUES (:name1,:name2)';
+  try:
+    for url in ret:
+
+      g.conn.execute(text(cmd), name1 = path, name2 = url);
+  except Exception as e:
+    print e
+  data={}
+  data[path]=ret
+  return jsonify(data=data)
+
+
 @app.route('/r/<path:path>')
 def rate_seller(path):
   # print path
@@ -432,7 +451,7 @@ def getComments():
   pid = request.args.get('pid', -1, type=int)
 
   try:
-    cursor = g.conn.execute("Select comment.*, u.uid,u.name from comment, users as u where pid=%s and comment.uid=u.uid",pid)
+    cursor = g.conn.execute("Select comment.*, u.uid,u.name from comment, users as u where pid=%s and comment.uid=u.uid order by comment.time asc",pid)
     ret=[]
     for result in cursor:
         data={}
@@ -598,7 +617,7 @@ def near_count():
   _bottom = lat -0.05
   _left = lng -0.05
   _right = lng +0.05
-  query = "select l.latitude,l.longitude,l.name,n.count from locations as l, (select count(*), pl.lid from set_ploc as pl where pl.lid IN (select lid from locations where latitude >= %s and longitude >= %s and  latitude <= %s and longitude <= %s) group by pl.lid) as n where n.lid=l.lid;"
+  query = "select l.latitude,l.longitude,l.name,n.count from locations as l, (select count(*), pl.lid from set_ploc as pl , post as p where p.pid=pl.pid and p.status=0 and pl.lid IN (select lid from locations where latitude >= %s and longitude >= %s and  latitude <= %s and longitude <= %s) group by pl.lid) as n where n.lid=l.lid;"
 
   cursor = g.conn.execute(query,_bottom, _left, _top, _right)
 
