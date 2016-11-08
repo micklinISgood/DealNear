@@ -17,7 +17,7 @@ Read about it online.
 
 import os,time,requests,psycopg2,hashlib,re, random
 from sqlalchemy import *
-from imagerq import microsoft_image
+# from imagerq import microsoft_image
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, jsonify, redirect, Response
 
@@ -469,7 +469,33 @@ def getComments():
     print e
     return jsonify(data="error")
 
+@app.route('/getChats', methods=['GET'])
+def getChats():
+  from_id = request.args.get('from_id', -1, type=int)
+  to_id = request.args.get('to_id', -1, type=int)
+  time = request.args.get('time', -1, type=int)
+  token = request.args.get('token', "", type=str)
+  try:
 
+    cursor = g.conn.execute("Select * from session where uid=%s and location=%s",to_id,token)
+    row = cursor.fetchone()
+    if row is None: return jsonify(data="error")
+
+
+    cursor = g.conn.execute("Select * from msg where (from_id,to_id)=(%s,%s) or (from_id,to_id)=(%s,%s) and time >%s order by time desc limit 30",from_id,to_id,to_id,from_id,time)
+    ret=[]
+    for result in cursor:
+        data={}
+        data["uid"]=result["from_id"]
+        data["time"]=result["time"]
+        data["text"]=result["text"]
+        ret.append(data)
+
+    return jsonify(data=ret)
+
+  except Exception as e:
+    print e
+    return jsonify(data="error")
 
 @app.route('/inbox', methods=['GET'])
 def inbox():

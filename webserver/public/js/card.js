@@ -218,7 +218,7 @@ function sendMsg(element) {
         from_id: getCookie("uid"),
         token: getCookie("token"),
         to_id: ids[0],
-        text: 'http://'+ window.location.host + '/p/'+ids[1]+'\n I am interested in this.'
+        text: 'I am interested in this. \n'+'http://'+ window.location.host + '/p/'+ids[1]
       }, function(data) { 
       		// console.log(data);
       });
