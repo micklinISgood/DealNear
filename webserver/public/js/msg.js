@@ -46,14 +46,38 @@ function loadChat(from_id){
 					td1.innerHTML="";
 					tr.appendChild(td1);
 					td2.align="right";
-					td2.innerHTML=data[i]["text"];
+					http_index = data[i]["text"].indexOf("http://");
+					url = data[i]["text"].substring(http_index);
+					if(url.length>0){
+						data[i]["text"]=data[i]["text"].substring(0,http_index);
+						td2.innerHTML=data[i]["text"];
+						var a = document.createElement('a');
+						a.href = url;
+						a.innerHTML=url;
+						td2.appendChild(a);
+					}else{
+						td2.innerHTML=data[i]["text"];
+					}
 				}else{
 					td2.align="left";
 					var td1 = document.createElement('td');
 					td1.align="right";
 					td1.innerHTML="";
 					tr.appendChild(td1);
-					td2.innerHTML=talkname.innerHTML+" : "+data[i]["text"];
+					http_index = data[i]["text"].indexOf("http://");
+					url = data[i]["text"].substring(http_index);
+
+					if(url.length>0){
+						data[i]["text"]=data[i]["text"].substring(0,http_index);
+						td2.innerHTML=talkname.innerHTML+" : "+data[i]["text"];
+						var a = document.createElement('a');
+						a.href = url;
+						a.innerHTML=url;
+						td2.appendChild(a);
+					}else{
+						td2.innerHTML=talkname.innerHTML+" : "+data[i]["text"];
+					}
+					
 				}
 	  		 	tr.appendChild(td2);
 	  		 	t.insertBefore(tr, t.children[0]);
