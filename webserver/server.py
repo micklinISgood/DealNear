@@ -300,14 +300,14 @@ def postlink(path):
     pass
   return render_template("post.html", key=data)
 
-@app.route('/sendMsg', methods=['GET'])
+@app.route('/sendMsg', methods=['POST'])
 def sendMsg():
-  from_id = request.args.get('from_id', -1, type=int)
-  to_id = request.args.get('to_id', -1, type=int)
-  token = request.args.get('token', "", type=str)
-  text = request.args.get('text', "", type=str)
+  from_id = request.form['from_id']
+  to_id = request.form['to_id']
+  token = request.form['token']
+  text = request.form['text']
   # print to_id,from_id
-  if from_id == -1 or to_id == -1 or text=="" or token=="": return jsonify(data="error")
+  if from_id == "" or to_id == "" or text=="" or token=="": return jsonify(data="error")
   cursor = g.conn.execute("Select * from session where uid=%s and location=%s",from_id,token)
   row = cursor.fetchone()
   if row is None: return jsonify(data="error")

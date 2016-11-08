@@ -220,17 +220,18 @@ function sendMsg(element) {
 
 	ids = this.id.split(",");
 	// console.log(ids);
-	$.getJSON('http://'+ window.location.host + '/sendMsg', {
+	$.post('http://'+ window.location.host + '/sendMsg', {
         from_id: getCookie("uid"),
         token: getCookie("token"),
         to_id: ids[0],
         text: 'I am interested in this. \n'+'http://'+ window.location.host + '/p/'+ids[1]
-      }, function(data) { 
-      		// console.log(data);
-      		inbox = document.getElementById('inbox');
-      		inbox.click();
+      }, function(data) {
+				
+				if(data.data=="error") return false;
+				window.location.reload();
+				
+			},'json');
 
-      });
 
 }
 

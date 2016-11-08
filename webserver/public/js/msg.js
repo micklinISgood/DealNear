@@ -1,11 +1,13 @@
 var current_time;
 function fireChat() {
   document.getElementById("modal02").style.display = "block";
-  var t = document.getElementById("chats");
-  t.innerHTML = "";
+
   var line = document.getElementById("chatname");
   name =this.innerHTML.split(",")[0];
   line.innerHTML=name;
+  var btn = document.getElementById("chatbtn");
+  btn.onclick = sendchatMsg;
+  btn.value = this.id;
   // current_time = parseInt(new Date().getTime()/1000);
   current_time=0;
   loadChat(this.id);
@@ -13,14 +15,41 @@ function fireChat() {
 function closeMsg() {
 	$("#modal02").hide();
 }
+function sendchatMsg(){
+	// console.log(this.value);
+	var text = document.getElementById("chatmsg");
+	// console.log(text.value);
+	msg = text.value;
+	
+	if(msg.length==0 || this.id==null) return false;
+	uid = getCookie("uid");
+	token = getCookie("token");
+
+
+	if(token=="" || uid==""){
+		window.location.reload();
+	}
+
+	$.post('http://'+ window.location.host + '/sendMsg', {
+        from_id: uid,
+        token: token,
+        to_id: this.value,
+        text: msg
+      }, function(data) {
+				
+				if(data.data=="error") return false;
+				//loadChat(this.value);
+
+				
+			},'json');
+}
 function loadChat(from_id){
 	
 	uid = getCookie("uid");
 	token = getCookie("token");
 
 	if(token=="" || uid==""){
-		$('#drop2').show();
-		$("#modal02").hide();
+		window.location.reload();
 	}
 
 	$.getJSON('http://'+ window.location.host + '/getChats', {
@@ -30,10 +59,11 @@ function loadChat(from_id){
 	    time:current_time
 	  }, function(data) {
 	  		data= data.data;
-	  		console.log(data)
+	
 	  		if(data=="error") return false;
 
 	  		var t = document.getElementById("chats");
+	  		t.innerHTML="";
 	  		var talkname = document.getElementById("chatname");
 
 	  		for(var i in data){
