@@ -17,7 +17,7 @@ Read about it online.
 
 import os,time,requests,psycopg2,hashlib,re, random
 from sqlalchemy import *
-# from imagerq import *
+from imagerq import microsoft_image
 from sqlalchemy.pool import NullPool
 from flask import Flask, request, render_template, g, jsonify, redirect, Response
 
@@ -252,7 +252,7 @@ def add():
 def tag(path): 
   
 
-  ret=get_photo_by_name(path)
+  ret=microsoft_image.get_photo_by_name(path)
   cmd = 'INSERT INTO piclib VALUES (:name1,:name2)';
   try:
     for url in ret:
@@ -449,8 +449,11 @@ def putComment():
 @app.route('/getComments', methods=['GET'])
 def getComments():
   pid = request.args.get('pid', -1, type=int)
-
+  uid = request.args.get('uid', -1, type=int)
+  token = request.args.get('token', "", type=str)
   try:
+    if token != "" and uid !=-1:
+      g.conn.execute("INSERT INTO watch (time, uid, pid) VALUES (%s, %s, %s);",int(time.time()),uid,pid)
     cursor = g.conn.execute("Select comment.*, u.uid,u.name from comment, users as u where pid=%s and comment.uid=u.uid order by comment.time asc",pid)
     ret=[]
     for result in cursor:

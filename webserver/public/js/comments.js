@@ -10,7 +10,9 @@ function clickPhoto() {
   btn.onclick =submitComment;
 
 	$.getJSON('http://'+ window.location.host + '/getComments', {
-	    pid: this.id
+	    pid: this.id,
+	    uid: getCookie("uid"),
+	    token: getCookie("token")
 	  }, function(data) {
 	  		data= data.data;
 	  		c.innerHTML="";
