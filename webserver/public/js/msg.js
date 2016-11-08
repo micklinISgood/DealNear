@@ -1,4 +1,4 @@
-var current_time;
+var current_time, periodic;
 function fireChat() {
   document.getElementById("modal02").style.display = "block";
 
@@ -11,9 +11,11 @@ function fireChat() {
   // current_time = parseInt(new Date().getTime()/1000);
   current_time=0;
   loadChat(this.id);
+  periodic = setInterval(loadChat, 5000, this.id);
 }
 function closeMsg() {
 	$("#modal02").hide();
+	clearInterval(periodic);
 }
 function sendchatMsg(){
 	// console.log(this.value);
@@ -38,6 +40,21 @@ function sendchatMsg(){
       }, function(data) {
 				
 				if(data.data=="error") return false;
+				var t = document.getElementById("chats");
+				var tr = document.createElement('tr');
+	  			
+				
+				//left first then right to do two columns
+				var td1 = document.createElement('td');
+				td1.align="left";
+				td1.innerHTML="";
+				tr.appendChild(td1);
+				var td2 = document.createElement('td');
+				td2.align="right";
+				td2.innerHTML=msg;
+				tr.appendChild(td2);
+
+	  		 	t.appendChild(tr);
 				//loadChat(this.value);
 
 				
