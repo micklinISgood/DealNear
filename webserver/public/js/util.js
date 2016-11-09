@@ -35,6 +35,7 @@ function showPost(){
 	$("#user_info").hide();
 	$("#content").hide();
 	$("#items").hide();
+	$("#pac-input").hide();
 }
 function showItems(){
 	$("#post_form").hide();

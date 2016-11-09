@@ -1,14 +1,16 @@
 var input, map, selector,infowindow, selector_btn;
 function init() {
 
-input = document.getElementById('pac-input');
 showMain();
 
 if(getCookie("lat")=="" ||getCookie("lng")==""){
-   	window.location.href = 'http://'+ window.location.host; 
-}else{
-    loadPost(getCookie("lat"),getCookie("lng"));
+   	setCookie("lat", "40.75890", 360);
+    setCookie("lng", "-73.98513", 360);
+    setCookie("loc_name", "Times Square", 360);
 }
+
+loadPost(getCookie("lat"),getCookie("lng"));
+
 
 if( getCookie("uid")!="" && getCookie("token")!="" && getCookie("name")!=""){
 
@@ -44,8 +46,8 @@ if( getCookie("uid")!="" && getCookie("token")!="" && getCookie("name")!=""){
 	loadMsg(getCookie("uid"),getCookie("token"));
 	post =document.getElementById('post');
 	post.onclick = addnewpost; 
-	loc =document.getElementById('locbtn1');
-	loc.onclick = openMap; 
+	// loc =document.getElementById('locbtn1');
+	// loc.onclick = openMap; 
 
 
 }else{
@@ -78,6 +80,7 @@ function requireLogin () {
 }
 
 
+input = document.getElementById('pac-input');
 var searchBox = new google.maps.places.SearchBox(input);
  google.maps.event.addListener(searchBox,'places_changed', function(){
     
