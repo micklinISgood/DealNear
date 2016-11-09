@@ -117,6 +117,15 @@ function loadPost(_lat,_lng) {
       }, function(data) {
       	 _data = data.data;
       	 uid = getCookie("uid");
+      	 if(_data.length==0){
+      	 	h2= document.createElement('h2');
+      	 	center= document.createElement('center');
+      	 	no_suff= document.createElement('p');
+      	 	no_suff.innerHTML="Here is no stuff for sale. Try another location please."
+      	 	center.appendChild(no_suff);
+      	 	h2.appendChild(center);
+      	 	tmp_con.appendChild(h2);
+      	 }
          for(var i in _data){
          	var iDiv = document.createElement('div');
 			iDiv.id = _data[i]["pid"];
@@ -148,7 +157,7 @@ function loadPost(_lat,_lng) {
 			tr1.appendChild(td2);
 			var tr2 = document.createElement('tr');
 			tr2.innerHTML = "Seller Rate: Unknown";
-			if (_data[i]["rate"] != null){tr2.innerHTML = "Seller Rate: "+_data[i]["rate"];}
+			if (_data[i]["rate"] != null){tr2.innerHTML = "Seller Rate: "+_data[i]["rate"].toFixed(2);}
 
 			var tr3 = document.createElement('tr');
 			var td3 = document.createElement('td');
