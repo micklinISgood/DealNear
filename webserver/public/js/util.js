@@ -23,12 +23,14 @@ function showUser(){
 	$("#user_info").show();
 	$("#content").hide();
 	$("#items").hide();
+	$("#pac-input").show();
 }
 function showMain(){
 	$("#post_form").hide();
 	$("#user_info").hide();
 	$("#content").show();
 	$("#items").hide();
+	$("#pac-input").show();
 }
 function showPost(){
 	$("#post_form").show();
@@ -42,6 +44,7 @@ function showItems(){
 	$("#user_info").hide();
 	$("#content").hide();
 	$("#items").show();
+	$("#pac-input").show();
 }
 function epoch2date(epoch){
 	var d = new Date(0);

@@ -16,6 +16,9 @@ function fireChat() {
 function closeMsg() {
 	$("#modal02").hide();
 	clearInterval(periodic);
+	_uid = getCookie("uid");
+	_token = getCookie("token");
+	loadMsg(_uid,_token);
 }
 function sendchatMsg(){
 	// console.log(this.value);
