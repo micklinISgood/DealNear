@@ -103,8 +103,11 @@ function submitUpadte () {
 				if(data.data=="error") return false;
 
 				if("name" in updata){
-					login =document.getElementById('login');
-					login.innerHTML=updata["name"];
+					login =document.getElementById('login2');
+					login.text=updata["name"];
+					span=document.createElement("span");
+					span.className="caret";
+					login.appendChild(span);
 					setCookie("name",updata["name"],360);
 				}
 				getUser();
