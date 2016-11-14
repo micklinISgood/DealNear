@@ -345,6 +345,7 @@ def updateUser():
 
   uid = request.form['uid']
   token = request.form['token']
+  keys = ['name','phone','email','pw']
   cursor = g.conn.execute("Select * from session where uid=%s and location=%s",uid,token)
   row = cursor.fetchone()
   if row is None: return jsonify(data="error")
@@ -352,8 +353,8 @@ def updateUser():
 
 
   for k,v in request.form.items():
-    if k=="uid" or k=="token": continue
-    g.conn.execute("Update users set "+k+"=%s where uid=%s",v,uid)
+    if k in keys:
+      g.conn.execute("Update users set "+k+"=%s where uid=%s",v,uid)
 
   return jsonify(data="ok")
 
