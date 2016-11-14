@@ -1,7 +1,7 @@
 # Project 1, Part 3
 
 * Assigned: 10/26
-* Due:  11/14
+* Due:  11/14 11:59PM EST
 * (worth 50% of overall Project 1 grade)
 
 
@@ -42,7 +42,7 @@ please let the staff know so we can allocate resources appropriately.
 
 # Submission
 
-Please leave your virtual machine running so the IP address does not change, then fill out the [Google submission form](https://goo.gl/forms/HiPzprF3mDN4d5Jm2)
+Please leave your virtual machine running so the IP address does not change, then fill out the [Google submission form](https://goo.gl/forms/ci9Ka2S39LrHpepI2)
 
 
 Students will present to their project mentor between `11/14` and `11/18`.
@@ -283,3 +283,9 @@ Note that these are all poor man's techniques.
 
   Tmux is quite powerful -- come ask me directly or post to piazza if you are curious about its other functionalities.  GNU Screen
   is an alternative to tmux.
+  
+  
+  
+### (optional) Copy Remote Database to Local
+
+[These](./Copy_db_to_local.md) are optional instructions on how to copy the remote database to local for testing.
