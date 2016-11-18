@@ -782,7 +782,10 @@ def post_item():
         # cursor = g.conn.execute("select max(pid) from post where title=%s and cr_time=%s and status=0",title,cr_time)
         pid = cursor.fetchone()[0]
         for lid in lids:
-          g.conn.execute("Insert into set_ploc (lid,pid) values (%s,%s)",lid,pid)
+          try:
+            g.conn.execute("Insert into set_ploc (lid,pid) values (%s,%s)",lid,pid)
+          except:
+            pass
         g.conn.execute("Insert into create_post (uid,pid) values (%s,%s)",uid,pid)
      
         cursor = g.conn.execute("select * from price where amount=%s",price)
