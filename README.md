@@ -34,6 +34,22 @@ select avg(p) from (select avg(point) as p, from_id from rate where to_id=%s and
 ```
 ![inbox](https://github.com/micklinISgood/DealNear/blob/master/img/seller_r.png)
 
+### User login/Singup 
+![](https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.33.05%20AM.png)
+
+### Post an item for sale
+![](https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.33.58%20AM.png)
+
+### Manage User info
+![](https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.35.00%20AM.png)
+
 ###Rate buyer & Seller & chatting
-<table><td>![e](https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.39.37%20AM.png)</td><td>(https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.42.06%20AM.png)</td><td>(https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.42.34%20AM.png)</td><td>(https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.43.16%20AM.png)</td><td></table>
+![](https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.35.23%20AM.png)
+![](https://github.com/micklinISgood/DealNear/blob/master//img/dealnear2016-12-09%2011.39.37%20AM.png) 
+![](https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.42.06%20AM.png)
+![](https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.42.34%20AM.png)
+![](https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.43.16%20AM.png)
+
+
+
 
