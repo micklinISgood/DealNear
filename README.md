@@ -9,7 +9,8 @@ cd webserver
 # Demo Video
 [![demo](https://img.youtube.com/vi/PF8eC2LBkVw/0.jpg)](https://www.youtube.com/watch?v=PF8eC2LBkVw)
 
-
+# ER Diagrams
+![](https://github.com/micklinISgood/DealNear/blob/master/img/ER.png)
 # Snapshots
 ###Display total on-sale product count for each location within bound for a query location
 ```sql
