@@ -32,4 +32,8 @@ Select msg.*, users.name from (select max(bi.time),bi.to_id from (
 select avg(p) from (select avg(point) as p, from_id from rate where to_id=%s and 
         from_id in (select to_id from sell where from_id=%s) group by from_id) as foo 
 ```
-![inbox](https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.38.29%20AM.png)
+![inbox](https://github.com/micklinISgood/DealNear/blob/master/img/seller_r.png)
+
+###Rate buyer & Seller & chatting
+<table><td>![e](https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.39.37%20AM.png)</td><td>(https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.42.06%20AM.png)</td><td>(https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.42.34%20AM.png)</td><td>(https://github.com/micklinISgood/DealNear/blob/master/img/dealnear2016-12-09%2011.43.16%20AM.png)</td><td></table>
+
