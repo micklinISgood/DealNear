@@ -6,6 +6,10 @@ cd webserver
 # [Demo Website](http://104.154.82.30:8111/)
 ####(Referential integrity for hosting may not hold.)
 
+# Demo Video
+[![demo](https://img.youtube.com/vi/PF8eC2LBkVw/0.jpg)](https://www.youtube.com/watch?v=PF8eC2LBkVw)
+
+
 # Snapshots
 ###Display total on-sale product count for each location within bound for a query location
 ```sql
