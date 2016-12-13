@@ -18,7 +18,7 @@ Install `python-dev` and `libpq-dev` (Requried to install `psycopg2`):
 
 Install required Python modules:
 
-        pip install flask psycopg2 sqlalchemy click requests
+        sudo pip install flask psycopg2 sqlalchemy click requests
 
 Install Git:
 
