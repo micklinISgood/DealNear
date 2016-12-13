@@ -10,6 +10,34 @@ Update Ubuntu package list and upgrade system software to the latest version:
 Install `python-pip` to install Python modules:
 
         sudo apt-get install python-pip
+
+Install `python-dev` and `libpq-dev` (Requried to install `psycopg2`):
+
+        sudo apt-get install python-dev 
+        sudo apt-get install libpq-dev
+
+Install required Python modules:
+
+        pip install flask psycopg2 sqlalchemy click requests
+
+Install Git:
+
+        sudo apt-get install git
+
+Clone Git repo:
+
+        git clone https://github.com/micklinISgood/DealNear.git
+	    cd DealNear/webserver
+
+Run `server.py`:
+```java
+ 	screen -L
+	python server.py --threaded
+	ctrl+a+d to detach
+```
+
+### Virtual environment
+
         
 Install `postgresql` packages:
 
