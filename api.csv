@@ -1,0 +1,118 @@
+Table Name,Attributes,API Methods,Line
+users,"uid, phone, pw, name, email","getPostById(result, data)
+ rate_seller(path)
+ updateUser()
+ getUser()
+ markAsSold()
+ guessBuyer()
+ login()
+ signUp()","127
+ 269
+ 344
+ 398
+ 545
+ 575
+ 697
+ 719"
+session,"uid, time, type, location","sendMsg()
+ logout()
+ rateSeller()
+ updateUser()
+ uploadUserloc()
+ deleteSession()
+ getUser()
+ putComment()
+ getChats()
+ inbox()
+ deleteItem()
+ markAsSold()
+ guessBuyer()
+ updatePrice()
+ userItems()
+ login()
+ signUp()
+ post_item()","304
+ 320
+ 330
+ 344
+ 361
+ 383
+ 398
+ 427
+ 473
+ 501
+ 530
+ 545
+ 575
+ 596
+ 617
+ 697
+ 719
+ 745"
+locations,"lid, name, latitude, longitude","getPostById(result, data)
+ sendMsg()
+ uploadUserloc()
+ near_count()
+ near_post()
+ post_item()","127
+ 304
+ 361
+ 640
+ 666
+ 745"
+post,"pid, title, cr_time, status","postlink(path)
+ deleteItem()
+ markAsSold()
+ userItems()
+ near_count()
+ near_post()
+ post_item()","293
+ 530
+ 545
+ 617
+ 640
+ 666
+ 745"
+price,amount,"updatePrice()
+ post_item()","596
+ 745"
+pictures,"pid, url","getPostById(result, data)
+ post_item()","127
+ 745"
+msg,"from_id, to_id, text, time","sendMsg()
+ getChats()
+ inbox()
+ guessBuyer()","304
+ 473
+ 501
+ 575"
+rate,"from_id, to_id, point, time","getPostById(result, data)
+ rateSeller()
+ markAsSold()","127
+ 330
+ 545"
+set_uloc,"uid, lid, time",uploadUserloc(),361
+set_price,"pid, amount, time","getPostById(result, data)
+ post_item()","127
+ 745"
+comment,"uid, pid, text, time","putComment()
+ getComments()","427
+ 450"
+set_ploc,"lid, pid","near_count()
+ near_post()
+ post_item()","640
+ 666
+ 745"
+create_post,"uid, pid","getPostById(result, data)
+ userItems()
+ post_item()","127
+ 617
+ 745"
+watch,"uid, pid, time","getPostById(result, data)
+ getComments()","127
+ 450"
+sell,"pid, from_id, to_id, time","getPostById(result, data)
+ rate_seller(path)
+ markAsSold()","127
+ 269
+ 545"
